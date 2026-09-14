@@ -5,16 +5,19 @@ export const metadata = {
   description: collection.description,
 };
 
+// Aged-paper cream is the foundation of the whole vintage look.
+const paper = "#F5F3C7";
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
         style={{
           margin: 0,
-          backgroundColor: "#14181F",
-          color: "#E8EDF2",
+          backgroundColor: paper,
+          color: "#4A3B2A",
           fontFamily:
-            "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+            "Georgia, 'Times New Roman', serif",
           minHeight: "100vh",
         }}
       >
