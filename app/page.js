@@ -1,4 +1,5 @@
 import collection from "../collection.config.js";
+import MusicGrid from "../components/MusicGrid.js";
 
 // The warm cream that ties the whole page together.
 const paper = "#F5F3C7";
@@ -176,7 +177,123 @@ const styles = {
     color: "#7A6B53",
     lineHeight: 1.6,
   },
+  musicSection: {
+    maxWidth: 1100,
+    margin: "0 auto",
+    padding: "60px 24px 72px",
+  },
+  musicKicker: {
+    fontFamily: "'Courier New', monospace",
+    color: rust,
+    fontSize: 13,
+    letterSpacing: 3,
+    textTransform: "uppercase",
+    margin: 0,
+  },
+  musicTitle: {
+    fontSize: 34,
+    fontWeight: 500,
+    fontFamily: "Georgia, 'Times New Roman', serif",
+    letterSpacing: 1,
+    color: ink,
+    margin: "10px 0 6px",
+  },
+  musicSub: {
+    fontSize: 15,
+    color: "#7A6B53",
+    lineHeight: 1.6,
+    margin: 0,
+  },
 };
+
+// The archive's album collection. Each entry is one curated record.
+// Drop cover art at /images/covers/<slug>.jpg and set coverImage below.
+const albums = [
+  {
+    slug: "kind-of-blue",
+    title: "Kind of Blue",
+    artist: "Miles Davis",
+    releaseYear: "1959",
+    releaseDate: "Aug 17, 1959",
+    pressing: "2017 · 180g Vinyl",
+    duration: "45:48",
+    genre: "Jazz",
+    subGenres: ["Modal", "Cool Jazz", "Post-Bop"],
+    coverImage: "/images/covers/kind-of-blue.jpg",
+    theme: "charcoal",
+    vinyl: true,
+  },
+  {
+    slug: "abbey-road",
+    title: "Abbey Road",
+    artist: "The Beatles",
+    releaseYear: "1969",
+    releaseDate: "Sep 26, 1969",
+    pressing: "2019 · 180g Vinyl",
+    duration: "47:03",
+    genre: "Rock",
+    subGenres: ["Classic Rock", "Pop Rock", "Psychedelic Rock"],
+    coverImage: "/images/covers/abbey-road.jpg",
+    theme: "cream",
+    vinyl: true,
+  },
+  {
+    slug: "come-away-with-me",
+    title: "Come Away With Me",
+    artist: "Norah Jones",
+    releaseYear: "2002",
+    releaseDate: "Feb 26, 2002",
+    pressing: "2013 · 180g Vinyl",
+    duration: "45:07",
+    genre: "Jazz",
+    subGenres: ["Vocal Jazz", "Contemporary Jazz", "Pop"],
+    coverImage: "/images/covers/come-away-with-me.jpg",
+    theme: "deepRed",
+    vinyl: true,
+  },
+  {
+    slug: "ok-computer",
+    title: "OK Computer",
+    artist: "Radiohead",
+    releaseYear: "1997",
+    releaseDate: "May 21, 1997",
+    pressing: "2017 · 2xLP Vinyl",
+    duration: "53:21",
+    genre: "Alternative Rock",
+    subGenres: ["Art Rock", "Electronic", "Experimental"],
+    coverImage: "/images/covers/ok-computer.jpg",
+    theme: "forest",
+    vinyl: true,
+  },
+  {
+    slug: "legend",
+    title: "Legend",
+    artist: "Bob Marley & The Wailers",
+    releaseYear: "1984",
+    releaseDate: "May 8, 1984",
+    pressing: "2015 · 180g Vinyl",
+    duration: "50:22",
+    genre: "Reggae",
+    subGenres: ["Roots Reggae", "Dub", "Rocksteady"],
+    coverImage: "/images/covers/legend.jpg",
+    theme: "mustard",
+    vinyl: true,
+  },
+  {
+    slug: "random-access-memories",
+    title: "Random Access Memories",
+    artist: "Daft Punk",
+    releaseYear: "2013",
+    releaseDate: "May 17, 2013",
+    pressing: "2013 · 2xLP Vinyl",
+    duration: "74:24",
+    genre: "Electronic",
+    subGenres: ["House", "Electropop", "Disco"],
+    coverImage: "/images/covers/random-access-memories.jpg",
+    theme: "purple",
+    vinyl: true,
+  },
+];
 
 export default function Home() {
   return (
@@ -245,12 +362,21 @@ of keeping it close and making it easy for the next person to find.`}
           <div style={styles.singleFrame}>
             <img
               src="/images/single.png"
-              alt="A single from the collection"
+              alt={'Sinn Sisamouth - "King of Music"'}
               style={styles.singleImage}
             />
           </div>
-          <p style={styles.singleCaption}>a single from the collection</p>
+          <p style={styles.singleCaption}>
+            Sinn Sisamouth - {'"'}King of Music{'"'}
+          </p>
         </div>
+      </section>
+
+      <section style={styles.musicSection}>
+        <p style={styles.musicKicker}>THE COLLECTION</p>
+        <h2 style={styles.musicTitle}>Curated Records</h2>
+        <p style={styles.musicSub}>A selection of records that shaped the sound — each one catalogued like a museum piece.</p>
+        <MusicGrid albums={albums} />
       </section>
 
       <main style={styles.wrap}>
