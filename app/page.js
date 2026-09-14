@@ -49,6 +49,69 @@ const styles = {
     color: ink,
     textShadow: "0 1px 0 #F5F3C7, 0 2px 3px rgba(74,59,42,0.35)",
   },
+  // The "why this archive" intro: paragraph on the left, single on the right.
+  intro: {
+    maxWidth: 1000,
+    margin: "0 auto",
+    padding: "64px 24px",
+    display: "flex",
+    gap: 48,
+    alignItems: "flex-start",
+    // Stack on narrow screens so reading stays comfortable.
+    flexWrap: "wrap",
+  },
+  introText: {
+    flex: "1 1 420px",
+    minWidth: 0,
+  },
+  introKicker: {
+    fontFamily: "'Courier New', monospace",
+    color: rust,
+    fontSize: 13,
+    letterSpacing: 3,
+    textTransform: "uppercase",
+    margin: 0,
+  },
+  introTitle: {
+    fontSize: 30,
+    fontWeight: 400,
+    letterSpacing: 1,
+    margin: "10px 0 16px",
+    lineHeight: 1.2,
+  },
+  introPara: {
+    fontSize: 18,
+    color: ink,
+    lineHeight: 1.7,
+    margin: 0,
+  },
+  introSingle: {
+    flex: "1 1 320px",
+    minWidth: 0,
+    textAlign: "center",
+  },
+  singleFrame: {
+    width: "100%",
+    maxWidth: 360,
+    // Deep espresso-brown matte frame around the single.
+    border: "10px solid #3A2317",
+    boxShadow:
+      "0 1px 0 #3A2317, 0 8px 20px rgba(74,59,42,0.18)",
+    transform: "rotate(-0.6deg)",
+  },
+  singleImage: {
+    width: "100%",
+    height: "auto",
+    display: "block",
+  },
+  singleCaption: {
+    fontFamily: "'Courier New', monospace",
+    fontSize: 12,
+    letterSpacing: 1,
+    color: "#7A6B53",
+    margin: "12px 0 48px",
+    textAlign: "center",
+  },
   wrap: {
     maxWidth: 760,
     margin: "0 auto",
@@ -118,8 +181,9 @@ const styles = {
 export default function Home() {
   return (
     <div style={{ position: "relative" }}>
-      {/* Paper grain + soft vignette, layered over the whole page for a
-          worn, printed feel. */}
+      {/* Paper texture — aged-print grain over the cream background.
+          Multiply keeps it subtle and darkens the cream where the
+          texture has tone. Drop your file at /images/paper-texture.jpg */}
       <div
         aria-hidden="true"
         style={{
@@ -127,9 +191,24 @@ export default function Home() {
           inset: 0,
           zIndex: 1,
           pointerEvents: "none",
-          opacity: 0.5,
-          backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E\")",
+          opacity: 0.2,
+          mixBlendMode: "multiply",
+          backgroundImage: "url('/images/paper-texture.jpg')",
+          backgroundRepeat: "repeat",
+        }}
+      />
+      {/* Grunge texture — worn, stained edge overlay. Same blend settings.
+          Drop your file at /images/grunge-texture.jpg */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "fixed",
+          inset: 0,
+          zIndex: 1,
+          pointerEvents: "none",
+          opacity: 0.2,
+          mixBlendMode: "multiply",
+          backgroundImage: "url('/images/grunge-texture.jpg')",
           backgroundRepeat: "repeat",
         }}
       />
@@ -140,6 +219,39 @@ export default function Home() {
           <h1 style={styles.heroTitle}>{collection.name}</h1>
         </div>
       </header>
+
+      <section style={styles.intro}>
+        <div style={styles.introText}>
+          <p style={styles.introKicker}>WHY THIS ARCHIVE</p>
+          <h2 style={styles.introTitle}>
+            Why I chose Khmer old music
+          </h2>
+          {/* ─────────────────────────────────────────────────────────────
+     EDIT YOUR "WHY" TEXT HERE ↓
+     Type your real reason between the {` `} below. Replace this
+     whole paragraph with whatever you want on screen.
+     Keep Khmer words exactly as they are.
+     ───────────────────────────────────────────────────────── */}
+          <p style={styles.introPara}>
+            {`I grew up hearing the cassette tapes my grandparents kept —
+songs carried on the radio before anyone I knew had a record player.
+Those melodies hold the voice of Cambodia the way a photograph holds
+the light, and I want that voice to survive. This archive is my way
+of keeping it close and making it easy for the next person to find.`}
+          </p>
+        </div>
+
+        <div style={styles.introSingle}>
+          <div style={styles.singleFrame}>
+            <img
+              src="/images/single.png"
+              alt="A single from the collection"
+              style={styles.singleImage}
+            />
+          </div>
+          <p style={styles.singleCaption}>a single from the collection</p>
+        </div>
+      </section>
 
       <main style={styles.wrap}>
         <p style={styles.kicker}>KHMER LIVING ARCHIVE</p>
