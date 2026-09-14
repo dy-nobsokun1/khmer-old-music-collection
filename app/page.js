@@ -19,7 +19,9 @@ const styles = {
     backgroundImage:
       "url('/images/header.jpg'), linear-gradient(rgba(245,243,199,0.35), rgba(245,243,199,0.35))",
     backgroundSize: "cover",
-    backgroundPosition: "center",
+    // Anchor the photo to the top so, when the banner gets taller than the
+    // image, any cropping happens off the bottom — never the top.
+    backgroundPosition: "center top",
   },
   // The fade: an overlay gradient that is transparent at the top and
   // becomes the paper cream at the bottom, so the last 30% of the photo
