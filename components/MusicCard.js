@@ -1,5 +1,4 @@
 import MetaRow from "./MetaRow.js";
-import GenrePills from "./GenrePills.js";
 import AlbumThemes from "./AlbumThemes.js";
 
 // A single album card, styled like a curated physical record in an archive.
@@ -69,6 +68,12 @@ export default function MusicCard({ album, hovered, onHover }) {
     letterSpacing: 1,
     color: theme.sub,
     margin: "4px 0 0",
+  };
+  const englishTitleStyle = {
+    fontSize: 14,
+    fontFamily: "'Kantumruy Pro', Georgia, serif",
+    color: theme.sub,
+    margin: "2px 0 0",
   };
   const divider = {
     borderTop: `1px solid ${theme.divider}`,
@@ -165,43 +170,17 @@ export default function MusicCard({ album, hovered, onHover }) {
         )}
 
         <h3 style={titleStyle}>{album.title}</h3>
+        {album.englishTitle && (
+          <p style={englishTitleStyle}>{album.englishTitle}</p>
+        )}
         <p style={artistStyle}>{album.artist}</p>
 
         <div style={divider} />
 
-        <MetaRow
-          icon="🕐"
-          label="Release"
-          value={`${album.releaseYear} · ${album.releaseDate}`}
-          theme={theme}
-        />
-        <MetaRow
-          icon="💿"
-          label="Pressing"
-          value={album.pressing}
-          theme={theme}
-        />
-        <MetaRow
-          icon="🎵"
-          label="Genre"
-          value={album.genre}
-          theme={theme}
-        />
-        <MetaRow
-          icon="⏱"
-          label="Duration"
-          value={album.duration}
-          theme={theme}
-        />
-
-        <div style={{ marginTop: "auto" }}>
-          <div style={divider} />
-          <GenrePills
-            genre={album.genre}
-            subGenres={album.subGenres}
-            theme={theme}
-          />
-        </div>
+        <MetaRow icon="🕐" label="Release" value={album.releaseYear} theme={theme} />
+        <MetaRow icon="💿" label="Pressing" value={album.pressing} theme={theme} />
+        <MetaRow icon="🎵" label="Genre" value={album.genre} theme={theme} />
+        <MetaRow icon="⏱" label="Duration" value={album.duration} theme={theme} />
       </div>
     </article>
   );
