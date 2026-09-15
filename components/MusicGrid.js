@@ -31,6 +31,8 @@ function GridItem({ album }) {
     flex: "1 1 310px",
     minWidth: 260,
     maxWidth: "100%",
+    // Let the card fill the whole cell so cards in a row match heights.
+    display: "flex",
   };
   return (
     <div style={width}>

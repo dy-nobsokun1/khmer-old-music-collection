@@ -1,0 +1,17 @@
+/* Load the Kantumruy Pro font (weights 300–700) from Google Fonts.
+   Kantumruy Pro is a clean, readable family designed for Khmer text, and it
+   also covers Latin glyphs. Applied as the primary font for the site. */
+@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700&display=swap");
+
+body {
+  font-family: "Kantumruy Pro", Georgia, "Times New Roman", serif;
+}
+
+/* Rising-note stream: music notes travel up-and-toward the corner while
+   fading. Each note starts low (under the vinyl) and drifts up-right. */
+@keyframes noteRise {
+  0%   { transform: translate(0, 0)      scale(1);   opacity: 0;    }
+  15%  { transform: translate(6px, -10px) scale(1);   opacity: 0.95; }
+  45%  { transform: translate(14px, -48px) scale(0.82); opacity: 0.6; }
+  100% { transform: translate(26px, -104px) scale(0.5); opacity: 0;  }
+}

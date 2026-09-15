@@ -1,4 +1,5 @@
 import collection from "../collection.config.js";
+import "./globals.css";
 
 export const metadata = {
   title: `${collection.name} — Khmer Living Archive`,
@@ -17,7 +18,7 @@ export default function RootLayout({ children }) {
           backgroundColor: paper,
           color: "#4A3B2A",
           fontFamily:
-            "Georgia, 'Times New Roman', serif",
+            "'Kantumruy Pro', Georgia, 'Times New Roman', serif",
           minHeight: "100vh",
         }}
       >

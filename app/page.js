@@ -1,10 +1,6 @@
 import collection from "../collection.config.js";
-import MusicGrid from "../components/MusicGrid.js";
+import MusicArchive from "../components/MusicArchive.js";
 
-// The warm cream that ties the whole page together.
-const paper = "#F5F3C7";
-// A slightly darker cream for borders and ruled lines.
-const paperEdge = "#E7E0B8";
 // Deep sepia ink for body text.
 const ink = "#4A3B2A";
 // Muted terracotta accent.
@@ -113,187 +109,105 @@ const styles = {
     margin: "12px 0 48px",
     textAlign: "center",
   },
-  wrap: {
-    maxWidth: 760,
-    margin: "0 auto",
-    padding: "72px 24px 64px",
-    position: "relative",
-  },
-  kicker: {
-    fontFamily: "'Courier New', monospace",
-    color: rust,
-    fontSize: 13,
-    letterSpacing: 3,
-    textTransform: "uppercase",
-    margin: 0,
-  },
-  title: {
-    fontSize: 40,
-    fontWeight: 400,
-    margin: "8px 0 16px",
-    lineHeight: 1.15,
-    letterSpacing: 1,
-  },
-  description: {
-    fontSize: 19,
-    color: ink,
-    lineHeight: 1.65,
-    margin: 0,
-  },
-  ruled: {
-    height: 0,
-    borderTop: `1px solid ${paperEdge}`,
-    margin: "36px 0",
-  },
-  card: {
-    marginBottom: 20,
-    padding: "18px 20px",
-    backgroundColor: "rgba(255,255,255,0.35)",
-    border: `1px solid ${paperEdge}`,
-    borderRadius: 6,
-  },
-  cardLabel: {
-    fontFamily: "'Courier New', monospace",
-    fontSize: 11,
-    letterSpacing: 2,
-    color: rust,
-    margin: 0,
-  },
-  cardValue: {
-    fontSize: 17,
-    margin: "6px 0 0",
-  },
-  count: {
-    fontFamily: "'Courier New', monospace",
-    fontSize: 14,
-    color: rust,
-    marginTop: 44,
-  },
-  footer: {
-    marginTop: 56,
-    paddingTop: 20,
-    borderTop: `1px solid ${paperEdge}`,
-    fontSize: 13,
-    color: "#7A6B53",
-    lineHeight: 1.6,
-  },
-  musicSection: {
-    maxWidth: 1100,
-    margin: "0 auto",
-    padding: "60px 24px 72px",
-  },
-  musicKicker: {
-    fontFamily: "'Courier New', monospace",
-    color: rust,
-    fontSize: 13,
-    letterSpacing: 3,
-    textTransform: "uppercase",
-    margin: 0,
-  },
-  musicTitle: {
-    fontSize: 34,
-    fontWeight: 500,
-    fontFamily: "Georgia, 'Times New Roman', serif",
-    letterSpacing: 1,
-    color: ink,
-    margin: "10px 0 6px",
-  },
-  musicSub: {
-    fontSize: 15,
-    color: "#7A6B53",
-    lineHeight: 1.6,
-    margin: 0,
-  },
 };
 
 // The archive's album collection. Each entry is one curated record.
-// Drop cover art at /images/covers/<slug>.jpg and set coverImage below.
+// Each album shows its vinyl record image as the featured visual — drop the
+// files at /images/ and point vinylImage at them.
+
 const albums = [
   {
-    slug: "kind-of-blue",
-    title: "Kind of Blue",
-    artist: "Miles Davis",
-    releaseYear: "1959",
-    releaseDate: "Aug 17, 1959",
-    pressing: "2017 · 180g Vinyl",
-    duration: "45:48",
-    genre: "Jazz",
-    subGenres: ["Modal", "Cool Jazz", "Post-Bop"],
-    coverImage: "/images/covers/kind-of-blue.jpg",
-    theme: "charcoal",
-    vinyl: true,
-  },
-  {
-    slug: "abbey-road",
-    title: "Abbey Road",
-    artist: "The Beatles",
-    releaseYear: "1969",
-    releaseDate: "Sep 26, 1969",
-    pressing: "2019 · 180g Vinyl",
-    duration: "47:03",
-    genre: "Rock",
-    subGenres: ["Classic Rock", "Pop Rock", "Psychedelic Rock"],
-    coverImage: "/images/covers/abbey-road.jpg",
-    theme: "cream",
-    vinyl: true,
-  },
-  {
-    slug: "come-away-with-me",
-    title: "Come Away With Me",
-    artist: "Norah Jones",
-    releaseYear: "2002",
-    releaseDate: "Feb 26, 2002",
-    pressing: "2013 · 180g Vinyl",
-    duration: "45:07",
-    genre: "Jazz",
-    subGenres: ["Vocal Jazz", "Contemporary Jazz", "Pop"],
-    coverImage: "/images/covers/come-away-with-me.jpg",
-    theme: "deepRed",
-    vinyl: true,
-  },
-  {
-    slug: "ok-computer",
-    title: "OK Computer",
-    artist: "Radiohead",
-    releaseYear: "1997",
-    releaseDate: "May 21, 1997",
-    pressing: "2017 · 2xLP Vinyl",
-    duration: "53:21",
-    genre: "Alternative Rock",
-    subGenres: ["Art Rock", "Electronic", "Experimental"],
-    coverImage: "/images/covers/ok-computer.jpg",
-    theme: "forest",
-    vinyl: true,
-  },
-  {
-    slug: "legend",
-    title: "Legend",
-    artist: "Bob Marley & The Wailers",
-    releaseYear: "1984",
-    releaseDate: "May 8, 1984",
-    pressing: "2015 · 180g Vinyl",
-    duration: "50:22",
-    genre: "Reggae",
-    subGenres: ["Roots Reggae", "Dub", "Rocksteady"],
-    coverImage: "/images/covers/legend.jpg",
+    slug: "som-bour-meas",
+    title: "សំបូរមាស",
+    artist: "ស៊ីន ស៊ីសាមុត (Sinn Sisamouth)",
+    releaseYear: "Pre-1975",
+    releaseDate: "Unknown",
+    pressing: "Olympic · 45-8013-B",
+    duration: "Unknown",
+    genre: "Khmer Traditional",
+    subGenres: ["Kbach Folk", "Khmer Folk", "Romantic"],
+    vinylImage: "/images/vinyl 2.png",
     theme: "mustard",
     vinyl: true,
   },
+
   {
-    slug: "random-access-memories",
-    title: "Random Access Memories",
-    artist: "Daft Punk",
-    releaseYear: "2013",
-    releaseDate: "May 17, 2013",
-    pressing: "2013 · 2xLP Vinyl",
-    duration: "74:24",
-    genre: "Electronic",
-    subGenres: ["House", "Electropop", "Disco"],
-    coverImage: "/images/covers/random-access-memories.jpg",
-    theme: "purple",
+    slug: "oun-proam-smuhk",
+    title: "អូនព្រមស្ម័គ្រ",
+    artist: "Unknown",
+    releaseYear: "Unknown",
+    releaseDate: "Unknown",
+    pressing: "Unknown",
+    duration: "Unknown",
+    genre: "Khmer Traditional",
+    subGenres: ["Khmer Folk", "Romantic", "Traditional"],
+    vinylImage: "/images/vinyl 3.png",
+    theme: "cream",
+    vinyl: true,
+  },
+
+  {
+    slug: "tngai-chey",
+    title: "ថ្ងៃជ័យ",
+    artist: "Unknown",
+    releaseYear: "Unknown",
+    releaseDate: "Unknown",
+    pressing: "Unknown",
+    duration: "Unknown",
+    genre: "Khmer Traditional",
+    subGenres: ["Khmer Folk", "Traditional"],
+    vinylImage: "/images/vinyl 5.png",
+    theme: "deepRed",
+    vinyl: true,
+  },
+
+  {
+    slug: "bela-cha-cha-cha",
+    title: "បេឡា ចា៎ ចា៎ ចា៎",
+    artist: "ប៉ែន រ៉ន (Pen Ran)",
+    releaseYear: "1966",
+    releaseDate: "1966",
+    pressing: "Angkor · 45 RPM Vinyl",
+    duration: "02:55",
+    genre: "Khmer Pop",
+    subGenres: ["Cha Cha Cha", "Afro-Cuban", "Khmer Golden Era"],
+    vinylImage: "/images/vinyl 6.png",
+    theme: "forest",
+    vinyl: true,
+  },
+
+  {
+    slug: "Som Bong Lerng Rom",
+    title: "សូមបងឡើងរាំ",
+    artist: "ប៉ែន រ៉ន (Pen Ran)",
+    releaseYear: "1975",
+    releaseDate: "Unknown",
+    pressing: "វិមានឯករាជ្យ · 45-2970 · Side A",
+    duration: "02:48",
+    genre: "Khmer Pop",
+    subGenres: ["Cha Cha Cha", "Afro-Cuban", "Khmer Golden Era"],
+    vinylImage: "/images/vinyl 4.png",
+    theme: "forest",
+    vinyl: true,
+  },
+
+  {
+    slug: "Mok Rom Chea Muoy Chan Chhaya",
+    title: "មករាំជាមួយច័ន្ទឆាយា",
+    artist: "ស៊ីន ស៊ីសាមុត (Sinn Sisamouth)",
+    releaseYear: "1975",
+    releaseDate: "Unknown",
+    pressing: "Unknown",
+    duration: "02:32",
+    genre: "Khmer Pop",
+    subGenres: ["Cha Cha Cha", "Afro-Cuban", "Khmer Golden Era"],
+    vinylImage: "/images/vinyl 1.png",
+    theme: "forest",
     vinyl: true,
   },
 ];
+
+
 
 export default function Home() {
   return (
@@ -372,36 +286,7 @@ of keeping it close and making it easy for the next person to find.`}
         </div>
       </section>
 
-      <section style={styles.musicSection}>
-        <p style={styles.musicKicker}>THE COLLECTION</p>
-        <h2 style={styles.musicTitle}>Curated Records</h2>
-        <p style={styles.musicSub}>A selection of records that shaped the sound — each one catalogued like a museum piece.</p>
-        <MusicGrid albums={albums} />
-      </section>
-
-      <main style={styles.wrap}>
-        <p style={styles.kicker}>KHMER LIVING ARCHIVE</p>
-        <p style={styles.description}>{collection.description}</p>
-
-        <div style={styles.ruled} />
-
-        <div style={styles.card}>
-          <p style={styles.cardLabel}>CURATED BY</p>
-          <p style={styles.cardValue}>{collection.curator}</p>
-        </div>
-        <div style={styles.card}>
-          <p style={styles.cardLabel}>SOURCE</p>
-          <p style={styles.cardValue}>{collection.source}</p>
-        </div>
-
-        <p style={styles.count}>entries in the archive: 0 (for now)</p>
-
-        <footer style={styles.footer}>
-          Built in ICT 340 — Vibe Coding, American University of Phnom Penh,
-          Fall 2026. This archive is under construction all semester. Come
-          back in December.
-        </footer>
-      </main>
+      <MusicArchive albums={albums} />
     </div>
   );
 }
