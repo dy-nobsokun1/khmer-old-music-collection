@@ -15,37 +15,46 @@ export default function SignupPage() {
   async function signup(email, password) {
     setError("");
     setNotice("");
-    const supabase = createClient();
-    // emailRedirectTo points Supabase's confirmation link at our /auth/confirm
-    // route (instead of the Site URL default) so the PKCE exchange always
-    // completes in-app. The browser client builds it from the current origin.
-    const emailRedirectTo = `${window.location.origin}/auth/confirm`;
-    const { data, error: authError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo,
-      },
-    });
-    if (authError) {
-      // Deliberately unspecific, mirroring the login page's restraint.
+    try {
+      const supabase = createClient();
+      // emailRedirectTo points Supabase's confirmation link at our
+      // /auth/confirm route (instead of the Site URL default) so the PKCE
+      // exchange always completes in-app. Built from the current origin.
+      const emailRedirectTo = `${window.location.origin}/auth/confirm`;
+      const { data, error: authError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo,
+        },
+      });
+      if (authError) {
+        // Deliberately unspecific, mirroring the login page's restraint.
+        setError("That sign-up failed. Check your details and try again.");
+        // Dev-only: the real reason is deliberately hidden from visitors,
+        // but logging it lets us diagnose bad keys, allowlists, rate
+        // limits, and already-registered emails without changing what the
+        // user sees.
+        console.error(
+          "[signup] Supabase signUp failed:",
+          authError.code,
+          authError.message
+        );
+        return;
+      }
+      if (data.session) {
+        router.push("/");
+        router.refresh();
+        return;
+      }
+      setNotice(`Check your inbox at ${email} to confirm your account.`);
+    } catch (caught) {
+      // A thrown error (for example createClient failing because an env var
+      // is missing on this deployment) should not leave the form silently
+      // broken. Surface the same guarded message and log the cause.
+      console.error("[signup] unexpected failure:", caught);
       setError("That sign-up failed. Check your details and try again.");
-      // Dev-only: the real reason is deliberately hidden from visitors, but
-      // logging it lets us diagnose bad keys, allowlists, rate limits, and
-      // already-registered emails without changing what the user sees.
-      console.error(
-        "[signup] Supabase signUp failed:",
-        authError.code,
-        authError.message
-      );
-      return;
     }
-    if (data.session) {
-      router.push("/");
-      router.refresh();
-      return;
-    }
-    setNotice(`Check your inbox at ${email} to confirm your account.`);
   }
 
   return (
