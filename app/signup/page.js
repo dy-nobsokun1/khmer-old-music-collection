@@ -23,6 +23,14 @@ export default function SignupPage() {
     if (authError) {
       // Deliberately unspecific, mirroring the login page's restraint.
       setError("That sign-up failed. Check your details and try again.");
+      // Dev-only: the real reason is deliberately hidden from visitors, but
+      // logging it lets us diagnose bad keys, allowlists, rate limits, and
+      // already-registered emails without changing what the user sees.
+      console.error(
+        "[signup] Supabase signUp failed:",
+        authError.code,
+        authError.message
+      );
       return;
     }
     if (data.session) {
