@@ -16,9 +16,16 @@ export default function SignupPage() {
     setError("");
     setNotice("");
     const supabase = createClient();
+    // emailRedirectTo points Supabase's confirmation link at our /auth/confirm
+    // route (instead of the Site URL default) so the PKCE exchange always
+    // completes in-app. The browser client builds it from the current origin.
+    const emailRedirectTo = `${window.location.origin}/auth/confirm`;
     const { data, error: authError } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        emailRedirectTo,
+      },
     });
     if (authError) {
       // Deliberately unspecific, mirroring the login page's restraint.
