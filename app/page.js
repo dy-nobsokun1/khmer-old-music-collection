@@ -1,5 +1,7 @@
 import collection from "../collection.config.js";
 import MusicArchive from "../components/MusicArchive.js";
+import { createClient } from "../utils/supabase/server.js";
+import { revalidatePath } from "next/cache";
 
 // Deep sepia ink for body text.
 const ink = "#4A3B2A";
@@ -108,6 +110,45 @@ const styles = {
     color: "#7A6B53",
     margin: "12px 0 48px",
     textAlign: "center",
+  },
+  // Small account strip pinned to the top-right of the hero banner. Uses the
+  // same paper-cream pill as the page so it stays legible over the photo.
+  authBar: {
+    position: "absolute",
+    top: 16,
+    right: 24,
+    zIndex: 3,
+    display: "flex",
+    alignItems: "center",
+    gap: 12,
+    padding: "6px 14px",
+    backgroundColor: "rgba(245,243,199,0.92)",
+    border: "1px solid #CFBFA1",
+    borderRadius: 999,
+    color: ink,
+    fontFamily: "'Kantumruy Pro', Georgia, serif",
+  },
+  authEmail: {
+    fontSize: 14,
+    color: ink,
+  },
+  authLink: {
+    fontSize: 14,
+    color: rust,
+    textDecoration: "none",
+  },
+  authSeparator: {
+    fontSize: 13,
+    color: "#A08C6F",
+  },
+  logoutButton: {
+    border: "none",
+    background: "none",
+    padding: 0,
+    fontSize: 14,
+    color: rust,
+    textDecoration: "underline",
+    cursor: "pointer",
   },
 };
 
@@ -290,7 +331,22 @@ const albums = [
 
 
 
-export default function Home() {
+// Logs the current user out. Runs as a Server Action, so it can clear the
+// session cookie on the server and then re-serve fresh markup so the header
+// immediately reflects the logged-out state.
+export async function signOut() {
+  "use server";
+  const supabase = await createClient();
+  await supabase.auth.signOut();
+  revalidatePath("/", "page");
+}
+
+export default async function Home() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   return (
     <div style={{ position: "relative" }}>
       {/* Paper texture — aged-print grain over the cream background.
@@ -327,6 +383,28 @@ export default function Home() {
 
       <header style={styles.hero}>
         <div style={styles.heroFade} />
+        {/* Account strip: logged-in users see their email + a log-out button;
+            visitors see links to the login and sign-up pages. */}
+        <div style={styles.authBar}>
+          {user ? (
+            <>
+              <span style={styles.authEmail}>{user.email}</span>
+              <button
+                type="button"
+                onClick={signOut}
+                style={styles.logoutButton}
+              >
+                Log out
+              </button>
+            </>
+          ) : (
+            <>
+              <a href="/login" style={styles.authLink}>Log in</a>
+              <span style={styles.authSeparator}>·</span>
+              <a href="/signup" style={styles.authLink}>Sign up</a>
+            </>
+          )}
+        </div>
         <div style={styles.heroTitleWrap}>
           <h1 style={styles.heroTitle}>{collection.name}</h1>
         </div>
