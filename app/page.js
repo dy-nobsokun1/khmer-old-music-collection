@@ -215,6 +215,7 @@ const albums = [
   {
     slug: "antonietta",
     title: "អង់តូនីញែតា",
+    englishTitle: "Antonietta",
     artist: "ស៊ីន ស៊ីសាមុត (Sinn Sisamouth)",
     releaseYear: "1967",
     releaseDate: "Unknown",
@@ -229,6 +230,7 @@ const albums = [
   {
     slug: "marina",
     title: "ម៉ារីណា",
+    englishTitle: "Marina",
     artist: "ស៊ីន ស៊ីសាមុត (Sinn Sisamouth)",
     releaseYear: "1968",
     releaseDate: "Unknown",
@@ -243,6 +245,7 @@ const albums = [
   {
     slug: "love-satisfaction",
     title: "ស្រឡាញ់ពេញចិត្ត",
+    englishTitle: "Love Satisfaction",
     artist: "ស៊ីន ស៊ីសាមុត (Sinn Sisamouth)",
     releaseYear: "1966",
     releaseDate: "Unknown",
@@ -257,6 +260,7 @@ const albums = [
   {
     slug: "oun-chong-rom-leng",
     title: "អូនចង់រាំលេង",
+    englishTitle: "Oun Chong Rom Leng",
     artist: "រស់ សេរីសុទ្ធា (Ros Sereysothea)",
     releaseYear: "1970",
     releaseDate: "Unknown",

@@ -8,6 +8,7 @@ export default function searchAlbums(albums, query) {
   return albums.filter((a) => {
     const haystack = [
       a.title,
+      a.englishTitle,
       a.artist,
       a.genre,
       ...(a.subGenres || []),
