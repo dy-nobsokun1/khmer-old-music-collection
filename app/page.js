@@ -1,7 +1,9 @@
 import collection from "../collection.config.js";
 import MusicArchive from "../components/MusicArchive.js";
+import MusicArchiveFromSupabase from "../components/MusicArchiveFromSupabase.js";
 import { createClient } from "../utils/supabase/server.js";
 import { revalidatePath } from "next/cache";
+import { Suspense } from "react";
 
 // Deep sepia ink for body text.
 const ink = "#4A3B2A";
@@ -152,10 +154,10 @@ const styles = {
   },
 };
 
-// The archive's album collection. Each entry is one curated record.
-// Each album shows its vinyl record image as the featured visual — drop the
-// files at /images/ and point vinylImage at them.
-
+// The archive's album collection, kept here as the original hand-written
+// record list. The page no longer reads it: the collection section below is
+// loaded from the Supabase `entries` table by MusicArchiveFromSupabase. This
+// list stays in the repo as the reference for what the archive should contain.
 const albums = [
   {
     slug: "som-bour-meas",
@@ -445,7 +447,15 @@ of keeping it close and making it easy for the next person to find.`}
         </div>
       </section>
 
-      <MusicArchive albums={albums} />
+      {/* The collection comes from Supabase. The query runs on the server
+          inside this boundary, so everything above (hero, intro, account
+          strip) renders straight away and only the record grid waits. The
+          fallback is the same archive view with no records, which shows the
+          "Loading the collection…" notice in the same dashed box the empty
+          and no-results states use. */}
+      <Suspense fallback={<MusicArchive albums={[]} loading />}>
+        <MusicArchiveFromSupabase />
+      </Suspense>
     </div>
   );
 }
