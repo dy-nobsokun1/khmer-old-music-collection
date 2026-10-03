@@ -44,6 +44,24 @@ export default function MusicCard({ album, hovered, onHover }) {
     paddingBottom: "14px",
   };
 
+  // Small corner tag marking a vinyl pressing. It borrows the pill colours from
+  // the card's theme so it always sits on the palette rather than fighting it.
+  const vinylBadge = {
+    position: "absolute",
+    top: 10,
+    left: 10,
+    zIndex: 3,
+    padding: "3px 10px",
+    borderRadius: 999,
+    fontFamily: "'Courier New', monospace",
+    fontSize: 11,
+    letterSpacing: 1,
+    textTransform: "uppercase",
+    color: theme.pillInk,
+    backgroundColor: theme.pillBg,
+    border: `1px solid ${theme.accent}55`,
+  };
+
   // Content wrapper sits above the texture layer so text and artwork stay
   // clean, and stretches to fill the card height so every card matches.
   const content = {
@@ -80,7 +98,10 @@ export default function MusicCard({ album, hovered, onHover }) {
     margin: "14px 0",
   };
 
-  // The record image comes from the album data (e.g. /images/vinyl 1.png).
+  // The record image comes straight from the entry, and it is used exactly as
+  // stored: older entries hold a repo path like /images/vinyl 1.png, newer ones
+  // hold a full Supabase Storage URL. Nothing is concatenated onto it and no
+  // optimiser sits in front of it, so both shapes resolve without any config.
   const vinylSrc = album.vinylImage;
 
   // Rising notes: different sizes, staggered times, all drifting from under
@@ -159,13 +180,22 @@ export default function MusicCard({ album, hovered, onHover }) {
         </span>
       ))}
       <div style={content}>
-        {album.vinyl && (
+        {/* The photo shows whenever the entry has one. vinyl_image is a required
+            column, so gating the image on the vinyl flag meant a contributor who
+            answered "No" to "is this a vinyl pressing?" had their required photo
+            stored with a working URL and then never displayed — the card looked
+            empty. The two facts are now independent: the photo always renders,
+            and the vinyl answer reads as the badge below. */}
+        {vinylSrc && (
           <div style={vinylWrap}>
             <img
               src={vinylSrc}
               alt={`${album.title} record`}
               style={vinyl}
             />
+            {album.vinyl ? (
+              <span style={vinylBadge}>Vinyl</span>
+            ) : null}
           </div>
         )}
 

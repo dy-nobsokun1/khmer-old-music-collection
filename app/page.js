@@ -385,12 +385,21 @@ export default async function Home() {
 
       <header style={styles.hero}>
         <div style={styles.heroFade} />
-        {/* Account strip: logged-in users see their email + a log-out button;
-            visitors see links to the login and sign-up pages. */}
+        {/* Account strip: logged-in users see their email, a link to add a
+            record, and a log-out button; visitors see links to the login and
+            sign-up pages. The add-a-record link is shown only to signed-in
+            visitors because /contribute is behind the session check — sending
+            a logged-out visitor there would just bounce them to a "log in
+            first" page. */}
         <div style={styles.authBar}>
           {user ? (
             <>
               <span style={styles.authEmail}>{user.email}</span>
+              <span style={styles.authSeparator}>·</span>
+              <a href="/contribute" style={styles.authLink}>
+                Add a record
+              </a>
+              <span style={styles.authSeparator}>·</span>
               <button
                 type="button"
                 onClick={signOut}
