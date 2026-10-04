@@ -2,12 +2,14 @@ import { styles } from "./contributeStyles.js";
 
 // One labelled control, plus whatever help text and validation message belong
 // to it. Presentational only: the parent owns the value, the change handler and
-// the error string. Keeping the markup here means every field on the form is
-// wired up the same way, and the error message always lands directly under the
-// input it refers to.
+// the error string.
 //
-// The message is rendered as a React child, never as HTML. Khmer titles and
-// any other user-supplied text are therefore always text, never markup.
+// Props are named explicitly rather than spread through, so a field descriptor
+// can be data-driven without leaking input-only attributes (maxLength, type,
+// accept) onto a <select>, where React would warn about unknown DOM props.
+//
+// The message is rendered as a React child, never as HTML. Khmer titles and any
+// other user-supplied text are therefore always text, never markup.
 export default function EntryField({
   id,
   label,
@@ -15,11 +17,17 @@ export default function EntryField({
   error,
   required = false,
   options = null,
-  ...inputProps
+  type = "text",
+  value = "",
+  onChange,
+  maxLength,
+  placeholder,
+  inputMode,
+  accept,
 }) {
-  // Controls share one style; an invalid one gets a red border and a warmer
-  // background so the state is visible without relying on colour alone — the
-  // message below it says what is wrong in words too.
+  // An invalid control gets a red border and a warmer background, so the state
+  // is visible without relying on colour alone — the message below it also says
+  // what is wrong, in words.
   const control = error
     ? { ...styles.control, ...styles.invalid }
     : styles.control;
@@ -37,7 +45,7 @@ export default function EntryField({
       </label>
 
       {options ? (
-        <select id={id} style={control} {...inputProps}>
+        <select id={id} value={value} onChange={onChange} style={control}>
           {/* A real empty option rather than a placeholder attribute, so the
               "not chosen yet" state is a value the form can actually test. */}
           <option value="">Choose…</option>
@@ -48,15 +56,24 @@ export default function EntryField({
           ))}
         </select>
       ) : (
-        <input id={id} style={control} {...inputProps} />
+        <input
+          id={id}
+          type={type}
+          value={value}
+          onChange={onChange}
+          maxLength={maxLength}
+          placeholder={placeholder}
+          inputMode={inputMode}
+          accept={accept}
+          style={control}
+        />
       )}
 
       {hint ? <p style={styles.hint}>{hint}</p> : null}
 
       {/* role="alert" makes a screen reader announce the message the moment it
-          appears, and aria-invalid tells assistive tech the control is in
-          error. The two together are what make this accessible rather than
-          just coloured red. */}
+          appears. That plus the wording of the message is what makes this
+          accessible rather than just coloured red. */}
       {error ? (
         <p id={`${id}-error`} style={styles.error} role="alert">
           {error}

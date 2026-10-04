@@ -34,9 +34,12 @@ export default async function MusicArchiveFromSupabase() {
 }
 
 // One Supabase row -> the object shape MusicCard and searchAlbums expect.
+// Exported because the contributor list (app/my-archive) maps its rows here too:
+// a card must be built the same way wherever it is shown, or the two halves
+// start disagreeing about what a record looks like.
 // Column names are renamed, not rewritten: every value, Khmer text included,
 // is passed through exactly as it is stored.
-function toCard(row) {
+export function toCard(row) {
   return {
     id: row.id,
     title: row.title,

@@ -12,6 +12,15 @@ export default function MusicArchive({
   albums = [],
   loading = false,
   error = false,
+  // Optional headings and empty-state copy. The public archive passes none of
+  // these and gets the wording below; a contributor list passes its own, so the
+  // grid and the search do not have to exist twice.
+  kickerLabel = "THE COLLECTION",
+  heading = "Curated Records",
+  description =
+    "A selection of records that shaped the sound \u2014 each one catalogued like a museum piece.",
+  emptyMessage =
+    "The archive is empty \u2014 no entries have been published yet.",
 }) {
   const [query, setQuery] = useState("");
   const results = searchAlbums(albums, query);
@@ -56,12 +65,9 @@ export default function MusicArchive({
 
   return (
     <section style={section}>
-      <p style={kicker}>THE COLLECTION</p>
-      <h2 style={title}>Curated Records</h2>
-      <p style={sub}>
-        A selection of records that shaped the sound — each one catalogued like
-        a museum piece.
-      </p>
+      <p style={kicker}>{kickerLabel}</p>
+      <h2 style={title}>{heading}</h2>
+      {description ? <p style={sub}>{description}</p> : null}
 
       <SearchBar value={query} onChange={setQuery} />
 
@@ -85,9 +91,7 @@ export default function MusicArchive({
           No records match “{query}”. Try another title, artist, or genre.
         </ArchiveNotice>
       ) : results.length === 0 ? (
-        <ArchiveNotice>
-          The archive is empty — no entries have been published yet.
-        </ArchiveNotice>
+        <ArchiveNotice>{emptyMessage}</ArchiveNotice>
       ) : (
         <MusicGrid albums={results} />
       )}

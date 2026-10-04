@@ -400,6 +400,10 @@ export default async function Home() {
                 Add a record
               </a>
               <span style={styles.authSeparator}>·</span>
+              <a href="/my-archive" style={styles.authLink}>
+                My archive
+              </a>
+              <span style={styles.authSeparator}>·</span>
               <button
                 type="button"
                 onClick={signOut}

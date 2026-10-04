@@ -1,24 +1,22 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import EntryField from "./EntryField.js";
+import EntryFields from "./EntryFields.js";
 import uploadVinylImage from "./uploadVinylImage.js";
 import { validateEntry, trimValues, toSlug } from "./entryValidation.js";
-import {
-  genreOptions,
-  themeOptions,
-  vinylOptions,
-  acceptedImageTypes,
-} from "./entryOptions.js";
 import { createClient } from "../utils/supabase/client.js";
-import { styles } from "./contributeStyles.js";
 
 // The add-an-entry form. A Client Component because it owns live field state,
 // the photo file, and the upload.
 //
+// The fields, their hints and the submit button all live in EntryFields.js,
+// which the edit form on an entry page renders too, so the two forms cannot
+// drift apart. What is left here is what actually differs: inserting a new row
+// rather than updating one, and a photo that is mandatory.
+//
 // The parent (app/contribute/page.js) is the gate: it has already confirmed the
 // visitor is signed in and passes their user id down as a prop. There is no
-// "owner" input here at all — the owner is the session, full stop, so a crafted
+// "owner" input here at all -- the owner is the session, full stop, so a crafted
 // request cannot attribute an entry to somebody else from the browser.
 export default function ContributionForm({ userId }) {
   const router = useRouter();
@@ -28,12 +26,8 @@ export default function ContributionForm({ userId }) {
   const [formError, setFormError] = useState("");
   const [busy, setBusy] = useState(false);
 
-  // One handler factory for every text field, so adding a field is a one-line
-  // change and no field can be wired to the wrong state key.
-  const bind = (name) => ({
-    value: values[name] || "",
-    onChange: (event) => setValues((v) => ({ ...v, [name]: event.target.value })),
-  });
+  const onChange = (name, value) =>
+    setValues((v) => ({ ...v, [name]: value }));
 
   // Selecting a new photo clears the old error, otherwise a corrected choice
   // would still say "choose a photo" until the next submit.
@@ -107,7 +101,7 @@ export default function ContributionForm({ userId }) {
             ...e,
             slug: "That slug is already taken. Please choose another.",
           }));
-          setFormError("That slug is already in use — pick a different one.");
+          setFormError("That slug is already in use - pick a different one.");
         } else {
           setFormError("That entry could not be saved. Please try again in a moment.");
         }
@@ -131,141 +125,18 @@ export default function ContributionForm({ userId }) {
   }
 
   return (
-    // noValidate: the browser's own bubbles would pre-empt our messages, and
-    // would not know about rules like the 5 MB photo cap.
-    <form onSubmit={submit} style={styles.form} noValidate>
-      <EntryField
-        id="title"
-        label="Title"
-        hint="Khmer or English, up to 200 characters."
-        error={errors.title}
-        required
-        maxLength={200}
-        {...bind("title")}
-      />
-
-      <EntryField
-        id="slug"
-        label="Slug"
-        hint="Type the English title. Spaces and capitals are converted for you."
-        error={errors.slug}
-        required
-        maxLength={100}
-        {...bind("slug")}
-      />
-
-      <EntryField
-        id="artist"
-        label="Artist"
-        hint="Up to 150 characters."
-        error={errors.artist}
-        required
-        maxLength={150}
-        {...bind("artist")}
-      />
-
-      <EntryField
-        id="release_year"
-        label="Release year"
-        hint="Optional. A year between 1900 and today."
-        error={errors.release_year}
-        inputMode="numeric"
-        {...bind("release_year")}
-      />
-
-      <EntryField
-        id="release_date"
-        label="Release date"
-        hint="Optional. 1975, circa 1975, 1975-06-14, or Unknown."
-        error={errors.release_date}
-        {...bind("release_date")}
-      />
-
-      <EntryField
-        id="pressing"
-        label="Pressing"
-        hint="Optional, up to 200 characters. e.g. Olympic · 45-8013-B"
-        error={errors.pressing}
-        maxLength={200}
-        {...bind("pressing")}
-      />
-
-      <EntryField
-        id="duration"
-        label="Duration"
-        hint="Running time as MM:SS, e.g. 03:42."
-        error={errors.duration}
-        required
-        placeholder="03:42"
-        {...bind("duration")}
-      />
-
-      <EntryField
-        id="genre"
-        label="Genre"
-        error={errors.genre}
-        required
-        options={genreOptions}
-        {...bind("genre")}
-      />
-
-      <EntryField
-        id="sub_genres"
-        label="Sub-genres"
-        hint="Optional, up to 200 characters. Separate several with commas."
-        error={errors.sub_genres}
-        maxLength={200}
-        {...bind("sub_genres")}
-      />
-
-      {/* The photo is a File, not text, so it gets its own onChange: the state
-          holds the File object for the uploader, never a path or a data URL. */}
-      <EntryField
-        id="vinyl_image"
-        label="Photo of the record"
-        hint="Required. JPG, PNG or WebP, up to 5 MB."
-        error={errors.vinyl_image}
-        required
-        type="file"
-        accept={acceptedImageTypes}
-        onChange={onFileChange}
-      />
-
-      <EntryField
-        id="theme"
-        label="Card theme"
-        error={errors.theme}
-        required
-        options={themeOptions}
-        {...bind("theme")}
-      />
-
-      {/* A Yes/No question in the UI; the insert turns it into a boolean. */}
-      <EntryField
-        id="vinyl"
-        label="Is this a vinyl pressing?"
-        error={errors.vinyl}
-        required
-        options={vinylOptions}
-        {...bind("vinyl")}
-      />
-
-      {formError ? (
-        <p style={styles.formError} role="alert">
-          {formError}
-        </p>
-      ) : null}
-
-      {/* Disabled for the whole upload-and-save round trip, so a second click
-          cannot start a duplicate upload or a second insert. */}
-      <button
-        type="submit"
-        disabled={busy}
-        style={busy ? { ...styles.button, ...styles.buttonBusy } : styles.button}
-      >
-        {busy ? "Uploading photo…" : "Add to the archive"}
-      </button>
-    </form>
+    <EntryFields
+      values={values}
+      errors={errors}
+      formError={formError}
+      busy={busy}
+      onChange={onChange}
+      onFileChange={onFileChange}
+      onSubmit={submit}
+      submitLabel="Add to the archive"
+      busyLabel="Uploading photo…"
+      photoRequired
+    />
   );
 }
 

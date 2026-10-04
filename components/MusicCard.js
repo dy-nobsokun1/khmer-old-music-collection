@@ -1,3 +1,4 @@
+import Link from "next/link";
 import MetaRow from "./MetaRow.js";
 import AlbumThemes from "./AlbumThemes.js";
 
@@ -117,7 +118,15 @@ export default function MusicCard({ album, hovered, onHover }) {
     { symbol: "♪", size: 15, right: 140, top: 104, duration: "3.2s", delay: "2.3s" },
   ];
 
-  return (
+  // encodeURIComponent matters here: the archive already holds slugs with spaces
+  // and capitals ("Som Bong Lerng Rom"), which would not match the /entries/[slug]
+  // route unescaped. Next decodes params.slug back on arrival.
+  const entryHref = album.slug
+    ? `/entries/${encodeURIComponent(album.slug)}`
+    : null;
+
+  return entryHref ? (
+    <Link href={entryHref} style={{ display: "block", textDecoration: "none", color: "inherit" }}>
     <article
       style={card}
       onMouseEnter={() => onHover(true)}
@@ -211,6 +220,16 @@ export default function MusicCard({ album, hovered, onHover }) {
         <MetaRow icon="💿" label="Pressing" value={album.pressing} theme={theme} />
         <MetaRow icon="🎵" label="Genre" value={album.genre} theme={theme} />
         <MetaRow icon="⏱" label="Duration" value={album.duration} theme={theme} />
+      </div>
+    </article>
+    </Link>
+  ) : (
+    // Only reachable if an entry somehow has no slug. Rendered without the
+    // link so a missing value cannot produce a dead /entries/ href.
+    <article style={card}>
+      <div style={content}>
+        <h3 style={titleStyle}>{album.title}</h3>
+        <p style={artistStyle}>{album.artist}</p>
       </div>
     </article>
   );

@@ -112,7 +112,7 @@ export function toSlug(title) {
 // One rule per field, and only the first failure in a field is reported, so the
 // contributor sees one clear thing to fix rather than a cascade. Returns an
 // object that is empty when the entry is good to submit.
-export function validateEntry(values, file) {
+export function validateEntry(values, file, { photoRequired = true } = {}) {
   const v = trimValues(values);
   const errors = {};
 
@@ -160,8 +160,12 @@ export function validateEntry(values, file) {
     errors.sub_genres = "Keep the sub-genres to 200 characters or fewer.";
   }
 
-  const imageError = validateImageFile(file);
-  if (imageError) errors.vinyl_image = imageError;
+  // On edit the photo is optional: no file chosen means "keep the one this entry
+  // already has", so only a file that WAS picked has to pass the checks.
+  if (file || photoRequired) {
+    const imageError = validateImageFile(file);
+    if (imageError) errors.vinyl_image = imageError;
+  }
 
   if (!v.theme) errors.theme = "Choose a card theme.";
   else if (!themeOptions.includes(v.theme)) errors.theme = "Choose a theme from the list.";
