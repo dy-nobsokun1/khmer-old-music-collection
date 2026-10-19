@@ -16,13 +16,13 @@ import { styles } from "./contributeStyles.js";
 // options present means a <select> rather than a text input
 // type    "file" marks the photo field, whose required state differs per mode
 const FIELDS = [
-  { name: "title", label: "Title", hint: "Khmer or English, up to 200 characters.", required: true, maxLength: 200 },
-  { name: "slug", label: "Slug", hint: "Type the English title. Spaces and capitals are converted for you.", required: true, maxLength: 100 },
+  { name: "title", label: "Title in Khmer", hint: "Up to 200 characters.", required: true, maxLength: 200 },
+  { name: "title_english", label: "Title in English", hint: "Up to 100 characters. Spaces and capitals are converted for you.", required: true, maxLength: 100 },
   { name: "artist", label: "Artist", hint: "Up to 150 characters.", required: true, maxLength: 150 },
   { name: "release_year", label: "Release year", hint: "Optional. A year between 1900 and today.", inputMode: "numeric" },
   { name: "release_date", label: "Release date", hint: "Optional. 1975, circa 1975, 1975-06-14, or Unknown." },
   { name: "pressing", label: "Pressing", hint: "Optional, up to 200 characters. e.g. Olympic \u00b7 45-8013-B", maxLength: 200 },
-  { name: "duration", label: "Duration", hint: "Running time as MM:SS, e.g. 03:42.", required: true, placeholder: "03:42" },
+  { name: "duration", label: "Duration", hint: "Running time as M:SS, e.g. 3:42.", required: true, placeholder: "3:42" },
   { name: "genre", label: "Genre", required: true, options: genreOptions },
   { name: "sub_genres", label: "Sub-genres", hint: "Optional, up to 200 characters. Separate several with commas.", maxLength: 200 },
   { name: "vinyl_image", label: "Photo of the record", hint: "Required. JPG, PNG or WebP, up to 5 MB.", type: "file", accept: acceptedImageTypes },

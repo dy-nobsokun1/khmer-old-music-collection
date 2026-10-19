@@ -31,7 +31,7 @@ const SLUG_PATTERN = /^[a-z0-9-]+$/;
 // Release year, when given, must look like a year.
 const YEAR_PATTERN = /^\d{4}$/;
 
-// Duration must be MM:SS with seconds under 60.
+// Duration must be M:SS with seconds under 60.
 const DURATION_PATTERN = /^(?:[0-9]|[1-9][0-9]):[0-5][0-9]$/;
 
 // release_date is the archive's freest field: records survive with a bare year,
@@ -102,12 +102,11 @@ export function toSlug(title) {
     .slice(0, 100);
 }
 
-// SLUG UNIQUENESS is intentionally not checked here. Pre-checking would mean
-// selecting every slug in the table and shipping the whole list to the browser,
-// so any signed-in user could read every slug in the archive. Instead the form
-// checks only that a slug is well-formed and lets the database's unique
+// SLUG UNIQUENESS is intentionally not checked here. The slug is auto-generated
+// from the English title, so collisions are unlikely. Instead the form
+// checks only that the English title is well-formed and lets the database's unique
 // constraint be the single authority; the form maps PostgreSQL's 23505 back to
-// the slug field.
+// the title_english field.
 //
 // One rule per field, and only the first failure in a field is reported, so the
 // contributor sees one clear thing to fix rather than a cascade. Returns an
@@ -119,11 +118,8 @@ export function validateEntry(values, file, { photoRequired = true } = {}) {
   if (!v.title) errors.title = "Give the record a title.";
   else if (v.title.length > 200) errors.title = "Keep the title to 200 characters or fewer.";
 
-  if (!v.slug) errors.slug = "Type the English title so a slug can be made from it.";
-  else if (v.slug.length > 100) errors.slug = "Keep the slug to 100 characters or fewer.";
-  else if (!SLUG_PATTERN.test(v.slug)) {
-    errors.slug = "Use lowercase letters, numbers and hyphens only.";
-  }
+  if (!v.title_english) errors.title_english = "Type the English title so a slug can be made from it.";
+  else if (v.title_english.length > 100) errors.title_english = "Keep the English title to 100 characters or fewer.";
 
   if (!v.artist) errors.artist = "Name the artist.";
   else if (v.artist.length > 150) errors.artist = "Keep the artist to 150 characters or fewer.";
@@ -148,9 +144,9 @@ export function validateEntry(values, file, { photoRequired = true } = {}) {
     errors.pressing = "Keep the pressing to 200 characters or fewer.";
   }
 
-  if (!v.duration) errors.duration = "Enter the running time as MM:SS.";
+  if (!v.duration) errors.duration = "Enter the running time as M:SS.";
   else if (!DURATION_PATTERN.test(v.duration)) {
-    errors.duration = "Use MM:SS format, for example 03:42.";
+    errors.duration = "Use M:SS format, for example 3:42.";
   }
 
   if (!v.genre) errors.genre = "Choose a genre.";
@@ -204,3 +200,5 @@ function isAcceptableDate(raw) {
 }
 
 export { MAX_IMAGE_BYTES, ALLOWED_IMAGE_TYPES };
+
+

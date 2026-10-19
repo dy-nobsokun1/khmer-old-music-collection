@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import EntryFields from "./EntryFields.js";
 import uploadVinylImage from "./uploadVinylImage.js";
@@ -22,9 +22,16 @@ export default function ContributionForm({ userId }) {
   const router = useRouter();
   const [values, setValues] = useState(blankValues());
   const [file, setFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
   const [errors, setErrors] = useState({});
   const [formError, setFormError] = useState("");
   const [busy, setBusy] = useState(false);
+
+  // Clean up the object URL when the component unmounts so the browser
+  // releases the memory used by the preview image.
+  useEffect(() => {
+    return () => { if (previewUrl) URL.revokeObjectURL(previewUrl); };
+  }, [previewUrl]);
 
   const onChange = (name, value) =>
     setValues((v) => ({ ...v, [name]: value }));
@@ -32,8 +39,11 @@ export default function ContributionForm({ userId }) {
   // Selecting a new photo clears the old error, otherwise a corrected choice
   // would still say "choose a photo" until the next submit.
   const onFileChange = (event) => {
-    setFile(event.target.files?.[0] || null);
+    const newFile = event.target.files?.[0] || null;
+    setFile(newFile);
     setErrors((e) => ({ ...e, vinyl_image: undefined }));
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    setPreviewUrl(newFile ? URL.createObjectURL(newFile) : null);
   };
 
   async function submit(event) {
@@ -44,11 +54,11 @@ export default function ContributionForm({ userId }) {
     // Validate the trimmed values, so a title of only spaces fails here rather
     // than being written to the database as an empty string.
     const trimmed = trimValues(values);
-    // The slug is derived from whatever was typed, so the contributor can enter
-    // the English title in any casing, with or without spaces, and still store
-    // a slug that matches the rest of the archive. Validation then runs on the
-    // derived value rather than the raw input.
-    const slug = toSlug(trimmed.slug);
+    // The slug is auto-generated from the English title, so the contributor can enter
+// the English title in any casing, with or without spaces, and still store
+// a slug that matches the rest of the archive. Validation then runs on the
+// derived slug rather than the raw input.
+    const slug = toSlug(trimmed.title_english);
     const found = validateEntry({ ...trimmed, slug }, file);
     setErrors(found);
     if (Object.keys(found).length > 0) {
@@ -97,11 +107,8 @@ export default function ContributionForm({ userId }) {
         // gains a unique constraint, a bare code check would show a confident
         // but wrong "that slug is taken" message.
         if (insertError.code === "23505" && /slug/i.test(insertError.message || "")) {
-          setErrors((e) => ({
-            ...e,
-            slug: "That slug is already taken. Please choose another.",
-          }));
-          setFormError("That slug is already in use - pick a different one.");
+          setErrors((e) => ({ ...e, title_english: "This English title is already taken. Please choose another." }));
+          setFormError("This English title is already in use - pick a different one.");
         } else {
           setFormError("That entry could not be saved. Please try again in a moment.");
         }
@@ -144,7 +151,7 @@ export default function ContributionForm({ userId }) {
 function blankValues() {
   return {
     title: "",
-    slug: "",
+    title_english: "",
     artist: "",
     release_year: "",
     release_date: "",
@@ -156,3 +163,5 @@ function blankValues() {
     vinyl: "",
   };
 }
+
+

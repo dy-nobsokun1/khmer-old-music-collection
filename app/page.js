@@ -1,5 +1,4 @@
 import collection from "../collection.config.js";
-import albums from "../data/albums.js";
 import MusicArchive from "../components/MusicArchive.js";
 import MusicArchiveFromSupabase from "../components/MusicArchiveFromSupabase.js";
 import { createClient } from "../utils/supabase/server.js";

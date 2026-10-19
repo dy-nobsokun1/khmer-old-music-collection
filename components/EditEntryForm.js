@@ -39,7 +39,7 @@ export default function EditEntryForm({ entry, userId, onCancel }) {
     setFormError("");
 
     const trimmed = trimValues(values);
-    const slug = toSlug(trimmed.slug);
+    const slug = toSlug(trimmed.title_english);
     // photoRequired false: leaving the file picker empty means "keep the photo
     // this entry already has", not "this entry has no photo".
     const found = validateEntry({ ...trimmed, slug }, file, {
@@ -142,7 +142,7 @@ export default function EditEntryForm({ entry, userId, onCancel }) {
 function toFormValues(entry) {
   return {
     title: entry.title || "",
-    slug: entry.slug || "",
+    title_english: entry.slug ? entry.slug.replace(/-+/g, " ").replace(/\s+/g, " ").trim() : "",
     artist: entry.artist || "",
     release_year: entry.release_year == null ? "" : String(entry.release_year),
     release_date: entry.release_date || "",
