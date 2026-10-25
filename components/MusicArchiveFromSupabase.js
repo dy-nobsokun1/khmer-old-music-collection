@@ -19,6 +19,9 @@ export default async function MusicArchiveFromSupabase() {
       "id, created_at, title, slug, artist, release_year, release_date, " +
         "pressing, duration, genre, sub_genres, vinyl_image, theme, vinyl"
     )
+    // Published entries only — the public archive and search never show
+    // draft or returned rows.
+    .eq("status", "published")
     // Newest first. The id is a tiebreaker: every entry currently shares one
     // created_at, so without it the grid could reshuffle between visits.
     .order("created_at", { ascending: false })

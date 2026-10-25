@@ -70,6 +70,18 @@ export default function EditEntryForm({ entry, userId, onCancel }) {
         theme: trimmed.theme,
         vinyl: trimmed.vinyl === "Yes",
       };
+      // Reviewers can publish directly; everyone else sends the entry back to
+      // pending review. If the reviewer check itself fails, abort the edit.
+      const { data: reviewerData, error: reviewerError } = await supabase
+        .rpc("is_reviewer");
+      if (reviewerError) {
+        console.error("[edit] is_reviewer check failed:", reviewerError);
+        setFormError("That change wasn't saved. Please try again.");
+        setBusy(false);
+        return;
+      }
+      const isReviewer = Boolean(reviewerData);
+      if (!isReviewer) row.status = "pending";
       if (file) row.vinyl_image = await uploadVinylImage(file, userId);
 
       // owner, id and created_at are deliberately absent: this is an update to

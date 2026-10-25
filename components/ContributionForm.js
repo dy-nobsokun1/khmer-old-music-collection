@@ -1,10 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import EntryFields from "./EntryFields.js";
 import uploadVinylImage from "./uploadVinylImage.js";
 import { validateEntry, trimValues, toSlug } from "./entryValidation.js";
 import { createClient } from "../utils/supabase/client.js";
+import { styles } from "./contributeStyles.js";
 
 // The add-an-entry form. A Client Component because it owns live field state,
 // the photo file, and the upload.
@@ -19,13 +19,13 @@ import { createClient } from "../utils/supabase/client.js";
 // "owner" input here at all -- the owner is the session, full stop, so a crafted
 // request cannot attribute an entry to somebody else from the browser.
 export default function ContributionForm({ userId }) {
-  const router = useRouter();
   const [values, setValues] = useState(blankValues());
   const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [errors, setErrors] = useState({});
   const [formError, setFormError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   // Clean up the object URL when the component unmounts so the browser
   // releases the memory used by the preview image.
@@ -119,8 +119,7 @@ export default function ContributionForm({ userId }) {
       // Saved. Back to the archive, where the newest entry sorts to the top of
       // the grid. refresh() re-runs the server components so the new row is
       // really there instead of the previously rendered list.
-      router.push("/");
-      router.refresh();
+      setSubmitted(true);
     } catch (caught) {
       // The uploader throws short, safe messages; anything else is unexpected
       // (a dropped connection, a missing env var). Log the real cause, show the
@@ -129,6 +128,27 @@ export default function ContributionForm({ userId }) {
       setFormError("That entry could not be saved. Please try again in a moment.");
       setBusy(false);
     }
+  }
+
+  if (submitted) {
+    return (
+      <main style={styles.page}>
+        <div style={styles.shell}>
+          <p style={styles.kicker}>SUBMITTED</p>
+          <h1 style={styles.title}>Thank you for contributing</h1>
+          <p style={styles.sub}>
+            Your entry has been submitted successfully! Thank you for
+            contributing. Your entry will appear in the archive once it has
+            been reviewed and approved.
+          </p>
+          <p style={styles.sub}>
+            ការបញ្ជូនបទចម្រៀងរបស់អ្នកបានជោគជ័យ! សូមអរគុណចំពោះការចូលរួមចំណែក។
+            បទចម្រៀងរបស់អ្នកនឹងបង្ហាញនៅក្នុងបណ្ណសារបន្ទាប់ពីបានត្រួតពិនិត្យ និងអនុម័តរួចរាល់។
+          </p>
+          <a href="/" style={styles.backInline}>Back to the archive</a>
+        </div>
+      </main>
+    );
   }
 
   return (

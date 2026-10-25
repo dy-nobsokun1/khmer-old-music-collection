@@ -225,6 +225,10 @@ export default async function Home() {
                 My archive
               </a>
               <span style={styles.authSeparator}>·</span>
+              <a href="/my-entries" style={styles.authLink}>
+                My entries
+              </a>
+              <span style={styles.authSeparator}>·</span>
               <button
                 type="button"
                 onClick={signOut}
