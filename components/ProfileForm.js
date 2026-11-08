@@ -9,8 +9,8 @@ import { styles } from "./contributeStyles.js";
 // name and profile picture. Runs in the browser so it can preview the chosen
 // picture and talk to Supabase; the account it writes proves who it is.
 //
-// Only the owner's own row is ever touched. The insert and update are upserted
-// together (onConflict: "id"), and the database's RLS policies let a user write
+// Only the owner's own row is ever touched. An UPDATE touches an existing row,
+// and an INSERT creates one only when no row exists yet. RLS policies let a user write
 // exactly the row whose id is their own session user id — nothing else.
 export default function ProfileForm({
   userId,
@@ -98,10 +98,16 @@ export default function ProfileForm({
       // grants, so we update the owner's row and INSERT a fresh one only when no
       // row matched (a legacy account with no profile yet).
       const profileRow = { display_name: trimmed || null, avatar_path: avatarPath };
+      // .select() asks Postgres for the rows the UPDATE actually changed (UPDATE
+      // ... RETURNING). Without it the request goes out with return=minimal and
+      // data comes back null even when the row was saved, which makes the
+      // "no row yet" branch below wrongly try to INSERT and collide with the
+      // primary key on every re-edit.
       const { data: updated, error: updateError } = await supabase
         .from("profiles")
         .update(profileRow)
-        .eq("id", userId);
+        .eq("id", userId)
+        .select();
 
       if (updateError) throw updateError;
 

@@ -1,4 +1,5 @@
 "use client";
+import { Fragment } from "react";
 import EntryField from "./EntryField.js";
 import {
   genreOptions,
@@ -47,6 +48,11 @@ export default function EntryFields({
   submitLabel,
   busyLabel,
   photoRequired = true,
+  // Add-form only: the just-picked photo's preview and whether it passed
+  // the file checks. The edit form renders this component too and simply
+  // does not pass them, so its photo field keeps today's behaviour.
+  photoPreviewUrl = null,
+  photoVerified = false,
 }) {
   return (
     // noValidate: the browser's own bubbles would pre-empt our messages, and
@@ -57,30 +63,50 @@ export default function EntryFields({
         const required = isPhoto ? photoRequired : field.required;
 
         return (
-          <EntryField
-            key={field.name}
-            id={field.name}
-            label={field.label}
-            hint={
-              isPhoto && !photoRequired
-                ? "Optional. Leave this empty to keep the current photo. JPG, PNG or WebP, up to 5 MB."
-                : field.hint
-            }
-            error={errors[field.name]}
-            required={required}
-            options={field.options}
-            type={field.type}
-            accept={field.accept}
-            maxLength={field.maxLength}
-            placeholder={field.placeholder}
-            inputMode={field.inputMode}
-            {...(isPhoto
-              ? { onChange: onFileChange }
-              : {
-                  value: values[field.name] || "",
-                  onChange: (event) => onChange(field.name, event.target.value),
-                })}
-          />
+          <Fragment key={field.name}>
+            <EntryField
+              id={field.name}
+              label={field.label}
+              hint={
+                isPhoto && !photoRequired
+                  ? "Optional. Leave this empty to keep the current photo. JPG, PNG or WebP, up to 5 MB."
+                  : field.hint
+              }
+              error={errors[field.name]}
+              required={required}
+              options={field.options}
+              type={field.type}
+              accept={field.accept}
+              maxLength={field.maxLength}
+              placeholder={field.placeholder}
+              inputMode={field.inputMode}
+              {...(isPhoto
+                ? { onChange: onFileChange }
+                : {
+                    value: values[field.name] || "",
+                    onChange: (event) => onChange(field.name, event.target.value),
+                  })}
+            />
+
+            {/* A picked, valid photo gets a green confirmation under the box
+                so choosing a file is never met with silence. role="status"
+                makes a screen reader announce it. */}
+            {isPhoto && photoVerified ? (
+              <div style={photoStatusWrap}>
+                {photoPreviewUrl ? (
+                  <img
+                    src={photoPreviewUrl}
+                    alt="Photo preview"
+                    style={photoThumb}
+                  />
+                ) : null}
+                <p style={photoStatusText} role="status">
+                  Photo verified ✓ — it will upload when you submit. /
+                  រូបថតបានផ្ទៀងផ្ទាត់ ✓ — នឹងផ្ទុកឡើងនៅពេលអ្នកដាក់ស្នើ។
+                </p>
+              </div>
+            ) : null}
+          </Fragment>
         );
       })}
 
@@ -102,3 +128,31 @@ export default function EntryFields({
     </form>
   );
 }
+
+const photoStatusWrap = {
+  display: "flex",
+  alignItems: "center",
+  gap: 10,
+  margin: "8px 0 0",
+  padding: "10px 12px",
+  backgroundColor: "#E4F0E0",
+  border: "1px solid #B7D3AC",
+  borderRadius: 8,
+};
+
+const photoThumb = {
+  width: 56,
+  height: 56,
+  objectFit: "cover",
+  borderRadius: 6,
+  border: "1px solid #CFBFA1",
+  backgroundColor: "#FFFDF2",
+  flexShrink: 0,
+};
+
+const photoStatusText = {
+  margin: 0,
+  fontSize: 13,
+  color: "#2E5B3A",
+  lineHeight: 1.5,
+};

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import EntryFields from "./EntryFields.js";
 import uploadVinylImage from "./uploadVinylImage.js";
-import { validateEntry, trimValues, toSlug } from "./entryValidation.js";
+import { validateEntry, trimValues, toSlug, validateImageFile } from "./entryValidation.js";
 import { createClient } from "../utils/supabase/client.js";
 import { styles } from "./contributeStyles.js";
 
@@ -22,6 +22,10 @@ export default function ContributionForm({ userId }) {
   const [values, setValues] = useState(blankValues());
   const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+  // Whether the currently picked photo passed the file checks. Shown as a
+  // green "verified" confirmation under the photo box, so choosing a file
+  // is never followed by silence.
+  const [photoVerified, setPhotoVerified] = useState(false);
   const [errors, setErrors] = useState({});
   const [formError, setFormError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -41,9 +45,20 @@ export default function ContributionForm({ userId }) {
   const onFileChange = (event) => {
     const newFile = event.target.files?.[0] || null;
     setFile(newFile);
-    setErrors((e) => ({ ...e, vinyl_image: undefined }));
     if (previewUrl) URL.revokeObjectURL(previewUrl);
-    setPreviewUrl(newFile ? URL.createObjectURL(newFile) : null);
+
+    // Check the photo the moment it is picked, not only at submit: a good
+    // file gets the green verified confirmation under the box, a bad one
+    // gets its error right away, and picking nothing shows nothing extra.
+    const imageError = newFile ? validateImageFile(newFile) : "";
+    setErrors((e) => ({ ...e, vinyl_image: imageError || undefined }));
+    if (newFile && !imageError) {
+      setPreviewUrl(URL.createObjectURL(newFile));
+      setPhotoVerified(true);
+    } else {
+      setPreviewUrl(null);
+      setPhotoVerified(false);
+    }
   };
 
   async function submit(event) {
@@ -163,6 +178,8 @@ export default function ContributionForm({ userId }) {
       submitLabel="Add to the archive"
       busyLabel="Uploading photo…"
       photoRequired
+      photoPreviewUrl={previewUrl}
+      photoVerified={photoVerified}
     />
   );
 }
