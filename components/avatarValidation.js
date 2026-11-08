@@ -1,6 +1,6 @@
 // Profile-picture rules, kept separate from the record-photo checks in
-// entryValidation.js because the avatars bucket has its own, smaller limit
-// (2 MB versus the 5 MB the vinyl photos allow). Mirror the same OWASP-friendly
+// entryValidation.js because the avatars bucket enforces its own limit
+// (5 MB, matching the vinyl-photo bucket). Mirror the same OWASP-friendly
 // approach: the claimed MIME type and the filename extension must each land in
 // the allowlist independently, and the object is uploaded under a name the app
 // generates, so a user-supplied filename never reaches storage.
@@ -11,7 +11,7 @@ const ALLOWED_AVATAR_TYPES = {
   "image/webp": "webp",
 };
 
-const MAX_AVATAR_BYTES = 2 * 1024 * 1024; // 2 MB
+const MAX_AVATAR_BYTES = 5 * 1024 * 1024; // 5 MB
 
 // Returns "" when the file is acceptable, otherwise the bilingual message to
 // show under the field.
@@ -31,7 +31,7 @@ export function validateAvatarFile(file) {
   }
 
   if (!file.size || file.size > MAX_AVATAR_BYTES) {
-    return "The picture must be 2 MB or smaller. / រូបភាពត្រូវមានទំហំមិនលើសពី 2 MB។";
+    return "The picture must be 5 MB or smaller. / រូបភាពត្រូវមានទំហំមិនលើសពី 5 MB។";
   }
 
   return "";

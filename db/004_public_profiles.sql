@@ -112,7 +112,7 @@ create policy archive_profile_update on public.profiles
 -- Profiles are optional: no entries-to-profiles FK or entry updates.
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-values ('avatars', 'avatars', true, 2097152,
+values ('avatars', 'avatars', true, 5242880,
         array['image/jpeg', 'image/png', 'image/webp']);
 
 -- Restrictive policies AND with permissive policies, preventing existing broad

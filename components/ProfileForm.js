@@ -208,7 +208,7 @@ export default function ProfileForm({
           <p style={styles.error} role="alert">{errors.avatar}</p>
         ) : (
           <p style={styles.hint}>
-            JPG, PNG or WebP, up to 2 MB. / JPG, PNG ឬ WebP ដែលមានទំហំមិនលើសពី 2 MB។
+            JPG, PNG or WebP, up to 5 MB. / JPG, PNG ឬ WebP ដែលមានទំហំមិនលើសពី 5 MB។
           </p>
         )}
       </div>
