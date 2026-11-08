@@ -169,6 +169,14 @@ export default async function Home() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  // The Review link in the header is for reviewers only. The database answers
+  // is_reviewer, and it is asked here on the server so the header never guesses;
+  // signed-out visitors are not asked at all.
+  let isReviewer = false;
+  if (user) {
+    const { data, error } = await supabase.rpc("is_reviewer");
+    isReviewer = !error && data === true;
+  }
 
   return (
     <div style={{ position: "relative" }}>
@@ -228,6 +236,14 @@ export default async function Home() {
               <a href="/my-entries" style={styles.authLink}>
                 My entries
               </a>
+              {isReviewer ? (
+                <>
+                  <span style={styles.authSeparator}>·</span>
+                  <a href="/review" style={styles.authLink}>
+                    Review
+                  </a>
+                </>
+              ) : null}
               <span style={styles.authSeparator}>·</span>
               <button
                 type="button"
