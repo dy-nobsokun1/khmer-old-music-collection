@@ -57,7 +57,7 @@ export default async function MyArchivePage() {
   return (
     <main style={styles.page}>
       <MusicArchive
-        albums={error ? [] : (data || []).map(toCard)}
+        albums={error ? [] : (data || []).map((row) => toCard(row, null))}
         error={Boolean(error)}
         kickerLabel="MY ARCHIVE"
         heading="Entries you added"

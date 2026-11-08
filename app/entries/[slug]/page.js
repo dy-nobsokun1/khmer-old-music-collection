@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { createClient } from "../../../utils/supabase/server.js";
 import EntryDetail from "../../../components/EntryDetail.js";
+import { buildContributor } from "../../../components/MusicArchiveFromSupabase.js";
 
 // One entry's page, addressed by its slug.
 //
@@ -35,11 +36,25 @@ export default async function EntryPage({ params }) {
   // Component, and it has no use for the value.
   const { owner, ...safeEntry } = entry;
 
+  // Contributor credit: match the entry's owner to their public profile so the
+  // detail page shows who added it. Only the public name and avatar URL go to
+  // the browser; owner and any profile internals stay on the server.
+  let contributor = null;
+  if (owner) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("id, display_name, avatar_path")
+      .eq("id", owner)
+      .maybeSingle();
+    contributor = buildContributor(profile, supabase);
+  }
+
   return (
     <EntryDetail
       entry={safeEntry}
       isOwner={isOwner}
       userId={isOwner ? user.id : null}
+      contributor={contributor}
     />
   );
 }

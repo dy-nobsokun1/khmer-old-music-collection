@@ -4,6 +4,7 @@ import AlbumThemes from "./AlbumThemes.js";
 import MetaRow from "./MetaRow.js";
 import EditEntryForm from "./EditEntryForm.js";
 import DeleteEntryButton from "./DeleteEntryButton.js";
+import ContributorCredit from "./ContributorCredit.js";
 import { styles } from "./contributeStyles.js";
 
 // One entry, on its own page.
@@ -15,7 +16,7 @@ import { styles } from "./contributeStyles.js";
 // isOwner arrives as a boolean decided on the server. The owner's user id never
 // comes to the browser at all, so there is nothing here to tamper with; the
 // database still decides who may actually write (db/002_entries_owner_policies.sql).
-export default function EntryDetail({ entry, isOwner, userId }) {
+export default function EntryDetail({ entry, isOwner, userId, contributor = null }) {
   const [editing, setEditing] = useState(false);
   const theme = AlbumThemes[entry.theme] || AlbumThemes.cream;
 
@@ -70,6 +71,8 @@ export default function EntryDetail({ entry, isOwner, userId }) {
           ) : null}
           <MetaRow icon="💽" label="Vinyl" value={entry.vinyl ? "Yes" : "No"} theme={theme} />
         </div>
+
+        <ContributorCredit contributor={contributor} theme={theme} />
 
         {isOwner ? (
           <div style={styles.ownerActions}>

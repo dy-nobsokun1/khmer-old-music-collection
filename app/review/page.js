@@ -7,8 +7,8 @@ import { styles } from "../../components/contributeStyles.js";
 //
 // Security: the reviewer check runs here on the server and the page returns
 // before a line of entry data is rendered or fetched for anyone who is not a
-// reviewer. The query never selects `owner`, so a contributor's identity does
-// not reach the browser. Status changes go through the database's own
+// reviewer. Contributor details come from a separate reviewer-only function;
+// owner IDs are never sent to the browser. Status changes go through the database's own
 // review_entry function; nothing in this page writes to the entries table.
 export default async function ReviewPage() {
   const supabase = await createClient();
@@ -50,6 +50,18 @@ export default async function ReviewPage() {
     .order("created_at", { ascending: true })
     .order("id", { ascending: true });
 
+  const { data: contributors, error: contributorError } = !error && data?.length
+    ? await supabase.rpc("review_contributors")
+    : { data: [], error: null };
+  const contributorByEntry = new Map(
+    (contributors || []).map(({ entry_id, ...contributor }) => [entry_id, contributor])
+  );
+  const entries = (data || []).map((entry) => ({
+    ...entry,
+    contributor: contributorByEntry.get(String(entry.id)) || null,
+    contributorUnavailable: Boolean(contributorError),
+  }));
+
   return (
     <main style={styles.page}>
       <p style={styles.kicker}>REVIEW QUEUE</p>
@@ -59,7 +71,7 @@ export default async function ReviewPage() {
       </p>
 
       <ReviewBoard
-        initialEntries={error ? [] : (data || [])}
+        initialEntries={error ? [] : entries}
         loadError={Boolean(error)}
         emptyMessage={
           "No pending entries. All submissions have been reviewed! / " +

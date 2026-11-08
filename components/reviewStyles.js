@@ -8,6 +8,7 @@ import AlbumThemes from "./AlbumThemes.js";
 
 const ink = "#4A3B2A";
 const rust = "#A65A3C";
+const sub = "#7A6B53";
 
 // The cream record theme: the review card's paper tones and meta colours.
 export const theme = AlbumThemes.cream;
@@ -109,4 +110,96 @@ export const cardStyles = {
     borderRadius: 8,
     lineHeight: 1.5,
   },
+};
+
+// Styling for the Return confirmation dialog (components/ReturnForm.js). Same
+// palette and corner language as the rest of the review queue: paper cream,
+// sepia ink, muted terracotta rust.
+export const returnStyles = {
+  overlay: {
+    position: "fixed",
+    inset: 0,
+    backgroundColor: "rgba(74,59,42,0.45)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "20px",
+    zIndex: 20,
+  },
+  dialog: {
+    width: "100%",
+    maxWidth: 520,
+    backgroundColor: "#F7EEDB",
+    border: "1px solid #CFBFA1",
+    borderRadius: 16,
+    boxShadow: "0 14px 30px rgba(0,0,0,0.25)",
+    padding: "22px",
+    fontFamily: "'Kantumruy Pro', Georgia, serif",
+  },
+  heading: { margin: "0 0 4px", fontSize: 18, fontWeight: 500, color: ink },
+  entryTitle: { margin: "0 0 14px", fontSize: 14, color: theme.sub },
+  label: {
+    display: "block",
+    fontSize: 13,
+    letterSpacing: 1,
+    color: ink,
+    marginBottom: 6,
+  },
+  required: { color: rust },
+  textarea: {
+    width: "100%",
+    minHeight: 96,
+    padding: "10px 12px",
+    fontSize: 15,
+    fontFamily: "'Kantumruy Pro', Georgia, serif",
+    color: ink,
+    backgroundColor: "#FFFDF2",
+    borderWidth: 1,
+    borderStyle: "solid",
+    borderColor: "#CFBFA1",
+    borderRadius: 8,
+    outline: "none",
+    resize: "vertical",
+    boxSizing: "border-box",
+  },
+  invalid: { borderColor: "#B3402A", backgroundColor: "#FDF0EC" },
+  hint: { margin: "6px 0 0", fontSize: 12, color: sub, lineHeight: 1.5 },
+  error: {
+    margin: "10px 0 0",
+    padding: "10px 12px",
+    fontSize: 13,
+    color: "#8A2F1D",
+    backgroundColor: "#FDF0EC",
+    border: "1px solid #E0B48A",
+    borderRadius: 8,
+    lineHeight: 1.5,
+  },
+  row: {
+    display: "flex",
+    gap: 12,
+    flexWrap: "wrap",
+    justifyContent: "flex-end",
+    marginTop: 16,
+  },
+  cancel: {
+    padding: "10px 18px",
+    fontSize: 15,
+    cursor: "pointer",
+    fontFamily: "'Kantumruy Pro', Georgia, serif",
+    color: ink,
+    backgroundColor: "transparent",
+    border: "1px solid #CFBFA1",
+    borderRadius: 8,
+  },
+  confirm: {
+    padding: "10px 18px",
+    fontSize: 15,
+    cursor: "pointer",
+    fontFamily: "'Kantumruy Pro', Georgia, serif",
+    color: "#FFFDF2",
+    backgroundColor: rust,
+    border: "1px solid " + rust,
+    borderRadius: 8,
+  },
+  busy: { opacity: 0.6, cursor: "not-allowed" },
 };

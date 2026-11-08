@@ -1,5 +1,6 @@
 import Link from "next/link";
 import MetaRow from "./MetaRow.js";
+import ContributorCredit from "./ContributorCredit.js";
 import AlbumThemes from "./AlbumThemes.js";
 
 // A single album card, styled like a curated physical record in an archive.
@@ -220,6 +221,8 @@ export default function MusicCard({ album, hovered, onHover }) {
         <MetaRow icon="💿" label="Pressing" value={album.pressing} theme={theme} />
         <MetaRow icon="🎵" label="Genre" value={album.genre} theme={theme} />
         <MetaRow icon="⏱" label="Duration" value={album.duration} theme={theme} />
+
+        <ContributorCredit contributor={album.contributor || null} theme={theme} />
       </div>
     </article>
     </Link>

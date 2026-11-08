@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { createClient } from "../utils/supabase/client.js";
 import ReviewCard from "./ReviewCard.js";
+import ReturnForm from "./ReturnForm.js";
 import ArchiveNotice from "./ArchiveNotice.js";
 import { cardStyles } from "./reviewStyles.js";
 
@@ -14,6 +15,10 @@ const FAILURE_MESSAGE =
 // reviewer and fetched the pending entries; here Publish and Return call the
 // database's own review_entry function and the list updates from whatever it
 // reports. Statuses are never written directly: review_entry is the only path.
+//
+// Publish acts immediately with no note. Return opens a confirmation dialog
+// (ReturnForm) in which the reviewer must type a reason; that note travels with
+// the decision to review_entry so the contributor can see it on their /my-entries.
 export default function ReviewBoard({
   initialEntries = [],
   loadError = false,
@@ -24,6 +29,10 @@ export default function ReviewBoard({
   // can never re-enable another card's buttons (no entry gets decided twice).
   const [busy, setBusy] = useState(new Set());
   const [error, setError] = useState("");
+  // The entry whose Return dialog is open, or null when no dialog is shown.
+  // Whether this is set is what matters; the entry itself is carried along so
+  // Cancel and Confirm know which one they are acting on.
+  const [returnEntry, setReturnEntry] = useState(null);
 
   function markIdle(id) {
     setBusy((prev) => {
@@ -33,7 +42,7 @@ export default function ReviewBoard({
     });
   }
 
-  async function decide(entry, decision) {
+  async function decide(entry, decision, note = null) {
     if (busy.has(entry.id)) return;
     setError("");
     setBusy((prev) => new Set(prev).add(entry.id));
@@ -43,6 +52,7 @@ export default function ReviewBoard({
       const { data, error: rpcError } = await supabase.rpc("review_entry", {
         entry_id: entry.id,
         decision,
+        note,
       });
 
       // review_entry returns true only when it acted. Anything else — false,
@@ -58,9 +68,11 @@ export default function ReviewBoard({
         return;
       }
 
-      // Success: the entry is no longer pending, so drop it from the list.
+      // Success: the entry is no longer pending, so drop it from the list, and
+      // close its Return dialog if one was open.
       setEntries((list) => list.filter((item) => item.id !== entry.id));
       markIdle(entry.id);
+      setReturnEntry((prev) => (prev && prev.id === entry.id ? null : prev));
     } catch (caught) {
       console.error("[review] review_entry failed unexpectedly:", caught);
       setError(FAILURE_MESSAGE);
@@ -82,7 +94,7 @@ export default function ReviewBoard({
 
   return (
     <>
-      {error ? (
+      {error && !returnEntry ? (
         <p style={cardStyles.error} role="alert">
           {error}
         </p>
@@ -94,10 +106,20 @@ export default function ReviewBoard({
             entry={entry}
             busy={busy.has(entry.id)}
             onPublish={() => decide(entry, "published")}
-            onReturn={() => decide(entry, "returned")}
+            onReturn={() => setReturnEntry(entry)}
           />
         ))}
       </ul>
+
+      {returnEntry ? (
+        <ReturnForm
+          entry={returnEntry}
+          busy={busy.has(returnEntry.id)}
+          error={error}
+          onCancel={() => setReturnEntry(null)}
+          onConfirm={(note) => decide(returnEntry, "returned", note)}
+        />
+      ) : null}
     </>
   );
 }

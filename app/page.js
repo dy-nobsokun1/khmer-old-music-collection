@@ -236,6 +236,10 @@ export default async function Home() {
               <a href="/my-entries" style={styles.authLink}>
                 My entries
               </a>
+              <span style={styles.authSeparator}>·</span>
+              <a href="/profile" style={styles.authLink}>
+                Profile
+              </a>
               {isReviewer ? (
                 <>
                   <span style={styles.authSeparator}>·</span>

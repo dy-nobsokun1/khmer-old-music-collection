@@ -1,4 +1,5 @@
 import MetaRow from "./MetaRow.js";
+import ReviewContributor from "./ReviewContributor.js";
 import { cardStyles, theme } from "./reviewStyles.js";
 
 // One pending entry in the review queue, presented as a clean card for a
@@ -48,6 +49,8 @@ export default function ReviewCard({ entry, busy, onPublish, onReturn }) {
           />
         </div>
       </div>
+
+      <ReviewContributor contributor={entry.contributor} unavailable={entry.contributorUnavailable} />
 
       <div style={cardStyles.actions}>
         <button
