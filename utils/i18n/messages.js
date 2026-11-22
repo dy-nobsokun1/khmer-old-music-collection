@@ -65,6 +65,7 @@ const messages = {
   "Check your inbox at {email} to confirm your account.": "សូមពិនិត្យប្រអប់សំបុត្រនៅ {email} ដើម្បីបញ្ជាក់គណនីរបស់អ្នក។",
   "Check your email": "សូមពិនិត្យអ៊ីមែលរបស់អ្នក",
   "Confirm your email before signing in.": "សូមបញ្ជាក់អ៊ីមែលរបស់អ្នក មុនពេលចូលគណនី។",
+  "This confirmation link is invalid or expired. Confirm your email before signing in.": "តំណបញ្ជាក់នេះមិនត្រឹមត្រូវ ឬបានផុតកំណត់ហើយ។ សូមបញ្ជាក់អ៊ីមែលរបស់អ្នក មុនពេលចូលគណនី។",
   "If this email is new, check your inbox at {email} to confirm your account. If you already confirmed it, sign in.": "ប្រសិនបើអ៊ីមែលនេះមិនទាន់បានចុះឈ្មោះ សូមពិនិត្យប្រអប់សំបុត្រនៅ {email} ដើម្បីបញ្ជាក់គណនីរបស់អ្នក។ ប្រសិនបើអ្នកបានបញ្ជាក់អ៊ីមែលនេះរួចហើយ សូមចូលគណនី។",
   "Email confirmation is unavailable. Please contact the archive curator.": "មិនអាចបញ្ជាក់អ៊ីមែលបានទេ។ សូមទាក់ទងអ្នកថែរក្សាបណ្ណសារ។",
   "ADD AN ENTRY": "បន្ថែមបទចម្រៀង",

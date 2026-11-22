@@ -6,10 +6,12 @@ import { useTranslation } from "./LanguageProvider.js";
 import { createClient } from "../utils/supabase/client.js";
 import { rememberAccount } from "../utils/savedAccounts.js";
 
-export default function LoginForm({ initialEmail }) {
+export default function LoginForm({ initialEmail, confirmationFailed = false }) {
   const { t } = useTranslation();
   const router = useRouter();
-  const [error, setError] = useState("");
+  const [error, setError] = useState(confirmationFailed
+    ? "This confirmation link is invalid or expired. Confirm your email before signing in."
+    : "");
 
   async function login(email, password) {
     setError("");
