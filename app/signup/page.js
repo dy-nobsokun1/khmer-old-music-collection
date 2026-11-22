@@ -1,16 +1,12 @@
 "use client";
 import { useTranslation } from "../../components/LanguageProvider.js";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import AuthCard from "../../components/AuthCard.js";
 import { createClient } from "../../utils/supabase/client.js";
 
-// Account creation page. Makes a Supabase user with email/password. When the
-// project requires email confirmation (the default for Supabase), we show a
-// short message instead of signing straight in; otherwise we land on home.
+// Supabase must require email confirmation; signup never navigates into the app.
 export default function SignupPage() {
   const { t } = useTranslation();
-  const router = useRouter();
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
 
@@ -45,8 +41,9 @@ export default function SignupPage() {
         return;
       }
       if (data.session) {
-        router.push("/");
-        router.refresh();
+        // An immediate session means confirmation is disabled in Supabase.
+        await supabase.auth.signOut({ scope: "local" });
+        setError("Email confirmation is unavailable. Please contact the archive curator.");
         return;
       }
       setNotice(email);
@@ -62,11 +59,11 @@ export default function SignupPage() {
   return (
     <AuthCard
       kicker={t("JOIN THE ARCHIVE")}
-      title={t("Create an account")}
-      subtitle={t("Sign up to submit and manage your own entries.")}
+      title={t(notice ? "Check your email" : "Create an account")}
+      subtitle={t(notice ? "Confirm your email before signing in." : "Sign up to submit and manage your own entries.")}
       submitLabel={t("Create account")}
       error={error}
-      notice={notice ? t("Check your inbox at {email} to confirm your account.", { email: notice }) : ""}
+      notice={notice ? t("If this email is new, check your inbox at {email} to confirm your account. If you already confirmed it, sign in.", { email: notice }) : ""}
       footerHref="/login"
       footerText={t("Already have an account? Sign in.")}
       passwordAutoComplete="new-password"

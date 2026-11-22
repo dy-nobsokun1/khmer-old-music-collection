@@ -32,7 +32,11 @@ export async function updateSession(request) {
 
   // Refreshes the session if the access token is close to expiring, and
   // writes the refreshed cookie back through supabaseResponse.
-  await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
+  // A refresh must not preserve access for an unconfirmed email account.
+  if (user && !user.email_confirmed_at) {
+    await supabase.auth.signOut({ scope: "local" });
+  }
 
   return supabaseResponse;
 }

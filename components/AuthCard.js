@@ -27,7 +27,7 @@ export default function AuthCard({
 
   const submit = (event) => {
     event.preventDefault();
-    if (busy) return;
+    if (busy || notice) return;
     setBusy(true);
     Promise.resolve(onSubmit(email.trim(), password)).finally(() => setBusy(false));
   };
@@ -65,20 +65,22 @@ export default function AuthCard({
         <h1 style={s.title}>{title}</h1>
         {subtitle ? <p style={s.subtitle}>{subtitle}</p> : null}
 
-        <label htmlFor="auth-email" style={s.label}>{t("Email")}</label>
-        <input id="auth-email" type="email" required autoComplete="email"
-          value={email} onChange={(e) => setEmail(e.target.value)} style={s.input} />
+        {!notice && <>
+          <label htmlFor="auth-email" style={s.label}>{t("Email")}</label>
+          <input id="auth-email" type="email" required autoComplete="email"
+            value={email} onChange={(e) => setEmail(e.target.value)} style={s.input} />
 
-        <label htmlFor="auth-password" style={{ ...s.label, margin: "18px 0 0" }}>
-          {t("Password")}
-        </label>
-        <input id="auth-password" type="password" required
-          autoComplete={passwordAutoComplete}
-          value={password} onChange={(e) => setPassword(e.target.value)} style={s.input} />
+          <label htmlFor="auth-password" style={{ ...s.label, margin: "18px 0 0" }}>
+            {t("Password")}
+          </label>
+          <input id="auth-password" type="password" required
+            autoComplete={passwordAutoComplete}
+            value={password} onChange={(e) => setPassword(e.target.value)} style={s.input} />
 
-        <button type="submit" disabled={busy} style={s.button}>
-          {busy ? t("One moment…") : submitLabel}
-        </button>
+          <button type="submit" disabled={busy} style={s.button}>
+            {busy ? t("One moment…") : submitLabel}
+          </button>
+        </>}
 
         {notice ? <p style={s.notice} role="status">{notice}</p> : null}
         {error ? <p style={s.error} role="alert">{t(error)}</p> : null}
