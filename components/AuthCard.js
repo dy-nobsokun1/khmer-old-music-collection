@@ -1,4 +1,5 @@
 "use client";
+import { useTranslation } from "./LanguageProvider.js";
 import { useState } from "react";
 
 // Shared auth card for the /login and /signup pages. Presentational only: the
@@ -18,6 +19,7 @@ export default function AuthCard({
   passwordAutoComplete = "current-password",
   onSubmit,
 }) {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -62,23 +64,23 @@ export default function AuthCard({
         <h1 style={s.title}>{title}</h1>
         {subtitle ? <p style={s.subtitle}>{subtitle}</p> : null}
 
-        <label htmlFor="auth-email" style={s.label}>Email</label>
+        <label htmlFor="auth-email" style={s.label}>{t("Email")}</label>
         <input id="auth-email" type="email" required autoComplete="email"
           value={email} onChange={(e) => setEmail(e.target.value)} style={s.input} />
 
         <label htmlFor="auth-password" style={{ ...s.label, margin: "18px 0 0" }}>
-          Password
+          {t("Password")}
         </label>
         <input id="auth-password" type="password" required
           autoComplete={passwordAutoComplete}
           value={password} onChange={(e) => setPassword(e.target.value)} style={s.input} />
 
         <button type="submit" disabled={busy} style={s.button}>
-          {busy ? "One moment…" : submitLabel}
+          {busy ? t("One moment…") : submitLabel}
         </button>
 
         {notice ? <p style={s.notice} role="status">{notice}</p> : null}
-        {error ? <p style={s.error} role="alert">{error}</p> : null}
+        {error ? <p style={s.error} role="alert">{t(error)}</p> : null}
 
         <p style={s.footer}>
           <a href={footerHref} style={s.link}>{footerText}</a>

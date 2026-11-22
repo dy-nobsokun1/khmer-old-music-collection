@@ -1,4 +1,5 @@
 "use client";
+import { useTranslation } from "./LanguageProvider.js";
 import { useState } from "react";
 import { returnStyles } from "./reviewStyles.js";
 
@@ -12,6 +13,7 @@ const REASON_REQUIRED =
 // without touching the database, and Confirm locks while the review_entry call
 // is in flight so a decision is never sent twice.
 export default function ReturnForm({ entry, busy, error, onConfirm, onCancel }) {
+  const { t } = useTranslation();
   const [note, setNote] = useState("");
   const [touched, setTouched] = useState(false);
 
@@ -33,7 +35,7 @@ export default function ReturnForm({ entry, busy, error, onConfirm, onCancel }) 
         aria-labelledby="return-dialog-title"
       >
         <h3 id="return-dialog-title" style={returnStyles.heading}>
-          Return this submission? / បញ្ជូនការដាក់ស្នើនេះត្រឡប់?
+          {t("Return this submission? / បញ្ជូនការដាក់ស្នើនេះត្រឡប់?")}
         </h3>
         <p style={returnStyles.entryTitle}>
           {entry.title}
@@ -41,7 +43,7 @@ export default function ReturnForm({ entry, busy, error, onConfirm, onCancel }) 
         </p>
 
         <label style={returnStyles.label} htmlFor="review-note">
-          Reason for Return / មូលហេតុនៃការបញ្ជូនត្រឡប់
+          {t("Reason for Return / មូលហេតុនៃការបញ្ជូនត្រឡប់")}
           <span style={returnStyles.required}> *</span>
         </label>
         <textarea
@@ -49,7 +51,7 @@ export default function ReturnForm({ entry, busy, error, onConfirm, onCancel }) 
           rows={4}
           value={note}
           onChange={(event) => setNote(event.target.value)}
-          placeholder="What should the contributor correct? / តើត្រូវឲ្យអ្នកដាក់ស្នើកែអ្វីខ្លះ?"
+          placeholder={t("What should the contributor correct? / តើត្រូវឲ្យអ្នកដាក់ស្នើកែអ្វីខ្លះ?")}
           style={
             missing
               ? { ...returnStyles.textarea, ...returnStyles.invalid }
@@ -58,17 +60,17 @@ export default function ReturnForm({ entry, busy, error, onConfirm, onCancel }) 
         />
         {missing ? (
           <p style={{ ...returnStyles.hint, color: "#B3402A" }} role="alert">
-            {REASON_REQUIRED}
+            {t(REASON_REQUIRED)}
           </p>
         ) : (
           <p style={returnStyles.hint}>
-            A reason is required before confirming. / ទាមទារមូលហេតុមុនពេលបញ្ជាក់។
+            {t("A reason is required before confirming. / ទាមទារមូលហេតុមុនពេលបញ្ជាក់។")}
           </p>
         )}
 
         {error ? (
           <p style={returnStyles.error} role="alert">
-            {error}
+            {t(error)}
           </p>
         ) : null}
 
@@ -83,7 +85,7 @@ export default function ReturnForm({ entry, busy, error, onConfirm, onCancel }) 
                 : returnStyles.cancel
             }
           >
-            Cancel
+            {t("Cancel")}
           </button>
           <button
             type="button"
@@ -96,8 +98,8 @@ export default function ReturnForm({ entry, busy, error, onConfirm, onCancel }) 
             }
           >
             {busy
-              ? "Returning…"
-              : "Confirm Return / បញ្ជាក់ការបញ្ជូនត្រឡប់"}
+              ? t("Returning…")
+              : t("Confirm Return / បញ្ជាក់ការបញ្ជូនត្រឡប់")}
           </button>
         </div>
       </div>

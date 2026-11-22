@@ -1,4 +1,5 @@
 "use client";
+import { useTranslation } from "./LanguageProvider.js";
 import { useState, useEffect } from "react";
 import uploadAvatar from "./uploadAvatar.js";
 import { validateAvatarFile } from "./avatarValidation.js";
@@ -18,6 +19,7 @@ export default function ProfileForm({
   initialAvatarUrl = null,
   initialAvatarPath = null,
 }) {
+  const { t } = useTranslation();
   const [displayName, setDisplayName] = useState(initialDisplayName);
   const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -156,7 +158,7 @@ export default function ProfileForm({
       <div style={styles.row}>
         <div style={styles.field}>
           <label htmlFor="display-name" style={styles.label}>
-            Public display name / ឈ្មោះសាធារណៈ
+            {t("Public display name / ឈ្មោះសាធារណៈ")}
           </label>
           <input
             id="display-name"
@@ -172,11 +174,10 @@ export default function ProfileForm({
             }
           />
           {errors.display_name ? (
-            <p style={styles.error} role="alert">{errors.display_name}</p>
+            <p style={styles.error} role="alert">{t(errors.display_name)}</p>
           ) : (
             <p style={styles.hint}>
-              Shown beside your entries across the archive. Leave blank to stay
-              anonymous. / នឹងបង្ហាញនៅជាប់នឹងបទចម្រៀងរបស់អ្នកនៅក្នុងបណ្ណសារ។ ទុកឱ្យទទេដើម្បីមិនបញ្ចេញឈ្មោះ។
+              {t("Shown beside your entries across the archive. Leave blank to stay anonymous. / នឹងបង្ហាញនៅជាប់នឹងបទចម្រៀងរបស់អ្នកនៅក្នុងបណ្ណសារ។ ទុកឱ្យទទេដើម្បីមិនបញ្ចេញឈ្មោះ។")}
             </p>
           )}
         </div>
@@ -184,12 +185,12 @@ export default function ProfileForm({
 
       <div style={styles.field}>
         <label style={styles.label}>
-          Profile picture / រូបថតប្រវត្តិរូប
+          {t("Profile picture / រូបថតប្រវត្តិរូប")}
         </label>
         <div style={previewRow}>
           <span style={previewWrap}>
             {shownAvatar ? (
-              <img src={shownAvatar} alt="Profile picture preview" style={previewImg} />
+              <img src={shownAvatar} alt={t("Profile picture preview")} style={previewImg} />
             ) : (
               <span style={previewFallback} aria-hidden="true">{fallbackChar}</span>
             )}
@@ -201,24 +202,24 @@ export default function ProfileForm({
               onChange={onFileChange}
               style={{ display: "none" }}
             />
-            <span style={fileButton}>Choose / ជ្រើសរើស</span>
+            <span style={fileButton}>{t("Choose / ជ្រើសរើស")}</span>
           </label>
         </div>
         {errors.avatar ? (
-          <p style={styles.error} role="alert">{errors.avatar}</p>
+          <p style={styles.error} role="alert">{t(errors.avatar)}</p>
         ) : (
           <p style={styles.hint}>
-            JPG, PNG or WebP, up to 5 MB. / JPG, PNG ឬ WebP ដែលមានទំហំមិនលើសពី 5 MB។
+            {t("JPG, PNG or WebP, up to 5 MB. / JPG, PNG ឬ WebP ដែលមានទំហំមិនលើសពី 5 MB។")}
           </p>
         )}
       </div>
 
       {formError ? (
-        <p style={styles.formError} role="alert">{formError}</p>
+        <p style={styles.formError} role="alert">{t(formError)}</p>
       ) : null}
       {saved ? (
         <p style={savedMsg} role="status">
-          Your profile has been saved. / ប្រវត្តិរូបរបស់អ្នកត្រូវបានរក្សាទុក។
+          {t("Your profile has been saved. / ប្រវត្តិរូបរបស់អ្នកត្រូវបានរក្សាទុក។")}
         </p>
       ) : null}
 
@@ -228,7 +229,7 @@ export default function ProfileForm({
         disabled={busy}
         style={busy ? { ...styles.button, ...styles.buttonBusy } : styles.button}
       >
-        {busy ? "Saving… / កំពុងរក្សាទុក…" : "Save profile / រក្សាទុកប្រវត្តិរូប"}
+        {busy ? t("Saving… / កំពុងរក្សាទុក…") : t("Save profile / រក្សាទុកប្រវត្តិរូប")}
       </button>
     </div>
   );

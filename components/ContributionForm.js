@@ -1,4 +1,5 @@
 "use client";
+import { useTranslation } from "./LanguageProvider.js";
 import { useState, useEffect } from "react";
 import EntryFields from "./EntryFields.js";
 import uploadVinylImage from "./uploadVinylImage.js";
@@ -19,6 +20,7 @@ import { styles } from "./contributeStyles.js";
 // "owner" input here at all -- the owner is the session, full stop, so a crafted
 // request cannot attribute an entry to somebody else from the browser.
 export default function ContributionForm({ userId }) {
+  const { t } = useTranslation();
   const [values, setValues] = useState(blankValues());
   const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -149,18 +151,12 @@ export default function ContributionForm({ userId }) {
     return (
       <main style={styles.page}>
         <div style={styles.shell}>
-          <p style={styles.kicker}>SUBMITTED</p>
-          <h1 style={styles.title}>Thank you for contributing</h1>
+          <p style={styles.kicker}>{t("SUBMITTED")}</p>
+          <h1 style={styles.title}>{t("Thank you for contributing")}</h1>
           <p style={styles.sub}>
-            Your entry has been submitted successfully! Thank you for
-            contributing. Your entry will appear in the archive once it has
-            been reviewed and approved.
+            {t("Your entry has been submitted successfully! Thank you for contributing. Your entry will appear in the archive once it has been reviewed and approved.")}
           </p>
-          <p style={styles.sub}>
-            ការបញ្ជូនបទចម្រៀងរបស់អ្នកបានជោគជ័យ! សូមអរគុណចំពោះការចូលរួមចំណែក។
-            បទចម្រៀងរបស់អ្នកនឹងបង្ហាញនៅក្នុងបណ្ណសារបន្ទាប់ពីបានត្រួតពិនិត្យ និងអនុម័តរួចរាល់។
-          </p>
-          <a href="/" style={styles.backInline}>Back to the archive</a>
+          <a href="/" style={styles.backInline}>{t("Back to the archive")}</a>
         </div>
       </main>
     );
@@ -175,8 +171,8 @@ export default function ContributionForm({ userId }) {
       onChange={onChange}
       onFileChange={onFileChange}
       onSubmit={submit}
-      submitLabel="Add to the archive"
-      busyLabel="Uploading photo…"
+      submitLabel={t("Add to the archive")}
+      busyLabel={t("Uploading photo…")}
       photoRequired
       photoPreviewUrl={previewUrl}
       photoVerified={photoVerified}

@@ -1,3 +1,4 @@
+import { getTranslation } from "../../utils/i18n/server.js";
 import { createClient } from "../../utils/supabase/server.js";
 import { styles } from "../../components/contributeStyles.js";
 
@@ -13,6 +14,7 @@ import { styles } from "../../components/contributeStyles.js";
 // rows never render it, so an old note stops being "current" feedback as soon
 // as the contributor resubmits (status leaves 'returned' and the block disappears).
 export default async function MyEntriesPage() {
+  const { t } = await getTranslation();
   const supabase = await createClient();
 
   const {
@@ -23,18 +25,17 @@ export default async function MyEntriesPage() {
     return (
       <main style={styles.page}>
         <div style={styles.shell}>
-          <p style={styles.kicker}>MY ENTRIES</p>
-          <h1 style={styles.title}>Log in to see your entries</h1>
+          <p style={styles.kicker}>{t("MY ENTRIES")}</p>
+          <h1 style={styles.title}>{t("Log in to see your entries")}</h1>
           <p style={styles.sub}>
-            Your entries are kept under the account you sign in with, so
-            logging in is what shows you this list.
+            {t("Your entries are kept under the account you sign in with, so logging in is what shows you this list.")}
           </p>
           <p style={styles.hint}>
-            <a href="/login" style={styles.backInline}>Log in</a>
+            <a href="/login" style={styles.backInline}>{t("Log in")}</a>
             {" \u00b7 "}
-            <a href="/signup" style={styles.backInline}>Create an account</a>
+            <a href="/signup" style={styles.backInline}>{t("Create an account")}</a>
             {" \u00b7 "}
-            <a href="/" style={styles.backInline}>Back to the archive</a>
+            <a href="/" style={styles.backInline}>{t("Back to the archive")}</a>
           </p>
         </div>
       </main>
@@ -56,14 +57,14 @@ export default async function MyEntriesPage() {
 
   return (
     <main style={styles.page}>
-      <p style={styles.kicker}>MY ENTRIES</p>
-      <h1 style={styles.title}>Your entries</h1>
+      <p style={styles.kicker}>{t("MY ENTRIES")}</p>
+      <h1 style={styles.title}>{t("Your entries")}</h1>
       <p style={styles.sub}>
-        Records you have contributed. Each one shows its current status.
+        {t("Records you have contributed. Each one shows its current status.")}
       </p>
 
       {entries.length === 0 ? (
-        <p style={styles.sub}>You have not added any entries yet.</p>
+        <p style={styles.sub}>{t("You have not added any entries yet.")}</p>
       ) : (
         <ul style={entryList}>
           {entries.map((entry) => (
@@ -77,16 +78,16 @@ export default async function MyEntriesPage() {
               {entry.artist ? (
                 <span style={entryArtist}>{entry.artist}</span>
               ) : null}
-              <span style={entryStatus}>{statusLabel(entry.status)}</span>
+              <span style={entryStatus}>{t(statusLabel(entry.status))}</span>
               {entry.status === "returned" ? (
                 <div style={feedbackBlock}>
                   <h4 style={feedbackHeading}>
-                    Reviewer&rsquo;s Feedback / មតិយោបល់ពីអ្នកត្រួតពិនិត្យ
+                    {t("Reviewer’s Feedback / មតិយោបល់ពីអ្នកត្រួតពិនិត្យ")}
                   </h4>
                   <p style={feedbackText}>
                     {entry.review_note
                       ? entry.review_note
-                      : "No note was provided by the reviewer. / មិនមានមតិយោបល់ពីអ្នកត្រួតពិនិត្យទេ។"}
+                      : t("No note was provided by the reviewer. / មិនមានមតិយោបល់ពីអ្នកត្រួតពិនិត្យទេ។")}
                   </p>
                 </div>
               ) : null}
@@ -96,9 +97,9 @@ export default async function MyEntriesPage() {
       )}
 
       <p style={styles.pageFooter}>
-        <a href="/contribute" style={styles.backInline}>Add a record</a>
+        <a href="/contribute" style={styles.backInline}>{t("Add a record")}</a>
         {" \u00b7 "}
-        <a href="/" style={styles.backInline}>Back to the archive</a>
+        <a href="/" style={styles.backInline}>{t("Back to the archive")}</a>
       </p>
     </main>
   );

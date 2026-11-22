@@ -1,3 +1,4 @@
+import { getTranslation } from "../../utils/i18n/server.js";
 import { createClient } from "../../utils/supabase/server.js";
 import ContributionForm from "../../components/ContributionForm.js";
 import { styles } from "../../components/contributeStyles.js";
@@ -12,6 +13,7 @@ import { styles } from "../../components/contributeStyles.js";
 // depth: the page hides the form, the insert names its columns, and RLS makes
 // the row belong to the person who saved it.
 export default async function ContributePage() {
+  const { t } = await getTranslation();
   const supabase = await createClient();
 
   const {
@@ -22,27 +24,25 @@ export default async function ContributePage() {
     return (
       <main style={styles.page}>
         <div style={styles.shell}>
-          <p style={styles.kicker}>ADD AN ENTRY</p>
-          <h1 style={styles.title}>Log in to contribute</h1>
+          <p style={styles.kicker}>{t("ADD AN ENTRY")}</p>
+          <h1 style={styles.title}>{t("Log in to contribute")}</h1>
           <p style={styles.sub}>
-            Contributing a record means signing in first, so the archive knows
-            who to credit. It only takes a moment — and your entries stay yours
-            to edit later.
+            {t("Contributing a record means signing in first, so the archive knows who to credit. It only takes a moment — and your entries stay yours to edit later.")}
           </p>
           <div style={styles.form}>
             <p style={styles.hint}>
-              Already have an account?{" "}
+              {t("Already have an account?")}{" "}
               <a href="/login" style={styles.backInline}>
-                Log in
+                {t("Log in")}
               </a>
-              . New here?{" "}
+              {t(". New here?")}{" "}
               <a href="/signup" style={styles.backInline}>
-                Create one
+                {t("Create one")}
               </a>
               .
             </p>
             <a href="/" style={styles.buttonLink}>
-              Back to the archive
+              {t("Back to the archive")}
             </a>
           </div>
         </div>
@@ -55,19 +55,18 @@ export default async function ContributePage() {
   return (
     <main style={styles.page}>
       <div style={styles.shell}>
-        <p style={styles.kicker}>ADD AN ENTRY</p>
-        <h1 style={styles.title}>Contribute a record</h1>
+        <p style={styles.kicker}>{t("ADD AN ENTRY")}</p>
+        <h1 style={styles.title}>{t("Contribute a record")}</h1>
         <p style={styles.sub}>
-          {`Filing a record with ${user.email}. Everything marked * is required — the
-          photo in particular, since a record card needs something to show.`}
+          {t("Filing a record with {email}. Everything marked * is required — the photo in particular, since a record card needs something to show.", { email: user.email })}
         </p>
 
         <ContributionForm userId={user.id} />
 
         <p style={styles.hint}>
-          Changed your mind?{" "}
+          {t("Changed your mind?")}{" "}
           <a href="/" style={styles.backInline}>
-            Back to the archive
+            {t("Back to the archive")}
           </a>
         </p>
       </div>

@@ -1,17 +1,25 @@
 import collection from "../collection.config.js";
 import "./globals.css";
+import LanguageProvider from "../components/LanguageProvider.js";
+import LanguageToggle from "../components/LanguageToggle.js";
+import { getLanguage } from "../utils/i18n/server.js";
 
-export const metadata = {
-  title: `${collection.name} — Khmer Living Archive`,
-  description: collection.description,
-};
+export async function generateMetadata() {
+  const language = await getLanguage();
+  const identity = language === "km" ? collection.translations.km : collection;
+  return {
+    title: `${identity.name} — ${language === "km" ? "បណ្ណសាររស់ខ្មែរ" : "Khmer Living Archive"}`,
+    description: identity.description,
+  };
+}
 
 // Aged-paper cream is the foundation of the whole vintage look.
 const paper = "#F5F3C7";
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const language = await getLanguage();
   return (
-    <html lang="en">
+    <html lang={language}>
       <body
         style={{
           margin: 0,
@@ -22,7 +30,10 @@ export default function RootLayout({ children }) {
           minHeight: "100vh",
         }}
       >
-        {children}
+        <LanguageProvider initialLanguage={language}>
+          <LanguageToggle />
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );

@@ -1,5 +1,8 @@
+"use client";
 // Account details are supplied by the reviewer-only database function.
+import { useTranslation } from "./LanguageProvider.js";
 export default function ReviewContributor({ contributor, unavailable }) {
+  const { t } = useTranslation();
   const name = contributor?.display_name;
   const email = contributor?.email;
   const label = name || email;
@@ -11,9 +14,9 @@ export default function ReviewContributor({ contributor, unavailable }) {
     <div style={styles.row}>
       <span style={styles.avatar} aria-hidden="true">{initials}</span>
       <div style={styles.details}>
-        <p style={styles.label}>Contributor / អ្នកចូលរួមចំណែក</p>
+        <p style={styles.label}>{t("Contributor / អ្នកចូលរួមចំណែក")}</p>
         <p style={styles.name}>
-          {label || (unavailable ? "Contributor details unavailable" : "Unknown contributor")}
+          {label || (unavailable ? t("Contributor details unavailable") : t("Unknown contributor"))}
         </p>
         {name && email ? <p style={styles.email}>{email}</p> : null}
       </div>

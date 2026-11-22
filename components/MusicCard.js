@@ -1,3 +1,5 @@
+"use client";
+import { useTranslation } from "./LanguageProvider.js";
 import Link from "next/link";
 import MetaRow from "./MetaRow.js";
 import ContributorCredit from "./ContributorCredit.js";
@@ -6,6 +8,7 @@ import AlbumThemes from "./AlbumThemes.js";
 // A single album card, styled like a curated physical record in an archive.
 // Accepts one album object and renders everything about it.
 export default function MusicCard({ album, hovered, onHover }) {
+  const { t } = useTranslation();
   const theme = AlbumThemes[album.theme] || AlbumThemes.cream;
 
   const card = {
@@ -200,11 +203,11 @@ export default function MusicCard({ album, hovered, onHover }) {
           <div style={vinylWrap}>
             <img
               src={vinylSrc}
-              alt={`${album.title} record`}
+              alt={t("Record image: {title}", { title: album.title })}
               style={vinyl}
             />
             {album.vinyl ? (
-              <span style={vinylBadge}>Vinyl</span>
+              <span style={vinylBadge}>{t("Vinyl")}</span>
             ) : null}
           </div>
         )}
@@ -217,10 +220,10 @@ export default function MusicCard({ album, hovered, onHover }) {
 
         <div style={divider} />
 
-        <MetaRow icon="🕐" label="Release" value={album.releaseYear} theme={theme} />
-        <MetaRow icon="💿" label="Pressing" value={album.pressing} theme={theme} />
-        <MetaRow icon="🎵" label="Genre" value={album.genre} theme={theme} />
-        <MetaRow icon="⏱" label="Duration" value={album.duration} theme={theme} />
+        <MetaRow icon="🕐" label={t("Release")} value={album.releaseYear === "Unknown" ? t("Unknown") : album.releaseYear} theme={theme} />
+        <MetaRow icon="💿" label={t("Pressing")} value={album.pressing} theme={theme} />
+        <MetaRow icon="🎵" label={t("Genre")} value={t(album.genre)} theme={theme} />
+        <MetaRow icon="⏱" label={t("Duration")} value={album.duration} theme={theme} />
 
         <ContributorCredit contributor={album.contributor || null} theme={theme} />
       </div>

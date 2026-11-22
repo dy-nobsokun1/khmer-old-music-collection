@@ -1,4 +1,5 @@
 "use client";
+import { useTranslation } from "./LanguageProvider.js";
 import { useState } from "react";
 import SearchBar from "./SearchBar.js";
 import MusicGrid from "./MusicGrid.js";
@@ -22,6 +23,7 @@ export default function MusicArchive({
   emptyMessage =
     "The archive is empty \u2014 no entries have been published yet.",
 }) {
+  const { t } = useTranslation();
   const [query, setQuery] = useState("");
   const results = searchAlbums(albums, query);
   const searching = query.trim().length > 0;
@@ -65,15 +67,15 @@ export default function MusicArchive({
 
   return (
     <section style={section}>
-      <p style={kicker}>{kickerLabel}</p>
-      <h2 style={title}>{heading}</h2>
-      {description ? <p style={sub}>{description}</p> : null}
+      <p style={kicker}>{t(kickerLabel)}</p>
+      <h2 style={title}>{t(heading)}</h2>
+      {description ? <p style={sub}>{t(description)}</p> : null}
 
       <SearchBar value={query} onChange={setQuery} />
 
       {loading ? null : (
         <p style={count}>
-          {results.length} record{results.length === 1 ? "" : "s"} found
+          {t(results.length === 1 ? "{count} record found" : "{count} records found", { count: results.length })}
         </p>
       )}
 
@@ -81,17 +83,17 @@ export default function MusicArchive({
           entries are still loading, the query failed, the archive is empty, or
           the search simply matched nothing. */}
       {loading ? (
-        <ArchiveNotice>Loading the collection…</ArchiveNotice>
+        <ArchiveNotice>{t("Loading the collection…")}</ArchiveNotice>
       ) : error ? (
         <ArchiveNotice>
-          Couldn’t load the collection. Please refresh the page to try again.
+          {t("Couldn’t load the collection. Please refresh the page to try again.")}
         </ArchiveNotice>
       ) : results.length === 0 && searching ? (
         <ArchiveNotice>
-          No records match “{query}”. Try another title, artist, or genre.
+          {t("No records match “{query}”. Try another title, artist, or genre.", { query })}
         </ArchiveNotice>
       ) : results.length === 0 ? (
-        <ArchiveNotice>{emptyMessage}</ArchiveNotice>
+        <ArchiveNotice>{t(emptyMessage)}</ArchiveNotice>
       ) : (
         <MusicGrid albums={results} />
       )}

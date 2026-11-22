@@ -1,4 +1,7 @@
+"use client";
+import { useTranslation } from "./LanguageProvider.js";
 import { styles } from "./contributeStyles.js";
+import FilePicker from "./FilePicker.js";
 
 // One labelled control, plus whatever help text and validation message belong
 // to it. Presentational only: the parent owns the value, the change handler and
@@ -25,6 +28,7 @@ export default function EntryField({
   inputMode,
   accept,
 }) {
+  const { t } = useTranslation();
   // An invalid control gets a red border and a warmer background, so the state
   // is visible without relying on colour alone — the message below it also says
   // what is wrong, in words.
@@ -35,7 +39,7 @@ export default function EntryField({
   return (
     <div style={styles.field}>
       <label htmlFor={id} style={styles.label}>
-        {label}
+        {t(label)}
         {required ? (
           <span style={styles.required} aria-hidden="true">
             {" "}
@@ -48,13 +52,15 @@ export default function EntryField({
         <select id={id} value={value} onChange={onChange} style={control}>
           {/* A real empty option rather than a placeholder attribute, so the
               "not chosen yet" state is a value the form can actually test. */}
-          <option value="">Choose…</option>
+          <option value="">{t("Choose…")}</option>
           {options.map((option) => (
             <option key={option} value={option}>
-              {option}
+              {t(option)}
             </option>
           ))}
         </select>
+      ) : type === "file" ? (
+        <FilePicker id={id} accept={accept} onChange={onChange} style={control} />
       ) : (
         <input
           id={id}
@@ -62,21 +68,21 @@ export default function EntryField({
           value={value}
           onChange={onChange}
           maxLength={maxLength}
-          placeholder={placeholder}
+          placeholder={t(placeholder)}
           inputMode={inputMode}
           accept={accept}
           style={control}
         />
       )}
 
-      {hint ? <p style={styles.hint}>{hint}</p> : null}
+      {hint ? <p style={styles.hint}>{t(hint)}</p> : null}
 
       {/* role="alert" makes a screen reader announce the message the moment it
           appears. That plus the wording of the message is what makes this
           accessible rather than just coloured red. */}
       {error ? (
         <p id={`${id}-error`} style={styles.error} role="alert">
-          {error}
+          {t(error)}
         </p>
       ) : null}
     </div>

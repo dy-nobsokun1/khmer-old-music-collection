@@ -1,3 +1,5 @@
+import { translate } from "../utils/i18n/translate.js";
+
 // Case-insensitive search across every text field shown on a card.
 // Works for both Latin and Khmer (Khmer has no case, so lowercasing is safe
 // and substring matching handles partial names/titles).
@@ -11,7 +13,9 @@ export default function searchAlbums(albums, query) {
       a.englishTitle,
       a.artist,
       a.genre,
+      translate(a.genre, "km"),
       ...(a.subGenres || []),
+      ...(a.subGenres || []).map((name) => translate(name, "km")),
       a.releaseYear,
       a.releaseDate,
       a.pressing,

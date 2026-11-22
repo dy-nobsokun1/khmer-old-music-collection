@@ -18,6 +18,15 @@ const collection = {
 
   // Where does your knowledge come from? A person, a place, a community.
   source: "To be gathered",
+
+  translations: {
+    km: {
+      name: "អនុស្សាវរីយ៍មាស",
+      description: "បណ្ណសាររស់នៃវប្បធម៌ខ្មែរ ដែលបង្កើតឡើងសម្រាប់មុខវិជ្ជា ICT 340។",
+      curator: "ឈ្មោះរបស់អ្នក",
+      source: "នឹងប្រមូលនៅពេលក្រោយ",
+    },
+  },
 };
 
 export default collection;

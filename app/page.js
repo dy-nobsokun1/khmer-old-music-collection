@@ -1,3 +1,4 @@
+import { getTranslation } from "../utils/i18n/server.js";
 import collection from "../collection.config.js";
 import MusicArchive from "../components/MusicArchive.js";
 import MusicArchiveFromSupabase from "../components/MusicArchiveFromSupabase.js";
@@ -123,6 +124,13 @@ const styles = {
     display: "flex",
     alignItems: "center",
     gap: 12,
+    flexWrap: "wrap",
+    justifyContent: "flex-end",
+    left: 24,
+    width: "fit-content",
+    maxWidth: "calc(100% - 48px)",
+    marginLeft: "auto",
+    boxSizing: "border-box",
     padding: "6px 14px",
     backgroundColor: "rgba(245,243,199,0.92)",
     border: "1px solid #CFBFA1",
@@ -165,6 +173,7 @@ export async function signOut() {
 }
 
 export default async function Home() {
+  const { t, language } = await getTranslation();
   const supabase = await createClient();
   const {
     data: { user },
@@ -226,25 +235,25 @@ export default async function Home() {
               <span style={styles.authEmail}>{user.email}</span>
               <span style={styles.authSeparator}>·</span>
               <a href="/contribute" style={styles.authLink}>
-                Add a record
+                {t("Add a record")}
               </a>
               <span style={styles.authSeparator}>·</span>
               <a href="/my-archive" style={styles.authLink}>
-                My archive
+                {t("My archive")}
               </a>
               <span style={styles.authSeparator}>·</span>
               <a href="/my-entries" style={styles.authLink}>
-                My entries
+                {t("My entries")}
               </a>
               <span style={styles.authSeparator}>·</span>
               <a href="/profile" style={styles.authLink}>
-                Profile
+                {t("Profile")}
               </a>
               {isReviewer ? (
                 <>
                   <span style={styles.authSeparator}>·</span>
                   <a href="/review" style={styles.authLink}>
-                    Review
+                    {t("Review")}
                   </a>
                 </>
               ) : null}
@@ -254,27 +263,27 @@ export default async function Home() {
                 onClick={signOut}
                 style={styles.logoutButton}
               >
-                Log out
+                {t("Log out")}
               </button>
             </>
           ) : (
             <>
-              <a href="/login" style={styles.authLink}>Log in</a>
+              <a href="/login" style={styles.authLink}>{t("Log in")}</a>
               <span style={styles.authSeparator}>·</span>
-              <a href="/signup" style={styles.authLink}>Sign up</a>
+              <a href="/signup" style={styles.authLink}>{t("Sign up")}</a>
             </>
           )}
         </div>
         <div style={styles.heroTitleWrap}>
-          <h1 style={styles.heroTitle}>{collection.name}</h1>
+          <h1 style={styles.heroTitle}>{language === "km" ? collection.translations.km.name : collection.name}</h1>
         </div>
       </header>
 
       <section style={styles.intro}>
         <div style={styles.introText}>
-          <p style={styles.introKicker}>WHY THIS ARCHIVE</p>
+          <p style={styles.introKicker}>{t("WHY THIS ARCHIVE")}</p>
           <h2 style={styles.introTitle}>
-            Why I chose Khmer old music
+            {t("Why I chose Khmer old music")}
           </h2>
           {/* ─────────────────────────────────────────────────────────────
      EDIT YOUR "WHY" TEXT HERE ↓
@@ -283,11 +292,11 @@ export default async function Home() {
      Keep Khmer words exactly as they are.
      ───────────────────────────────────────────────────────── */}
           <p style={styles.introPara}>
-            {`I grew up hearing the cassette tapes my grandparents kept —
+            {t(`I grew up hearing the cassette tapes my grandparents kept —
 songs carried on the radio before anyone I knew had a record player.
 Those melodies hold the voice of Cambodia the way a photograph holds
 the light, and I want that voice to survive. This archive is my way
-of keeping it close and making it easy for the next person to find.`}
+of keeping it close and making it easy for the next person to find.`)}
           </p>
         </div>
 
@@ -295,12 +304,12 @@ of keeping it close and making it easy for the next person to find.`}
           <div style={styles.singleFrame}>
             <img
               src="/images/single.png"
-              alt={'Sinn Sisamouth - "King of Music"'}
+              alt={t("Sinn Sisamouth - \"King of Music\"")}
               style={styles.singleImage}
             />
           </div>
           <p style={styles.singleCaption}>
-            Sinn Sisamouth - {'"'}King of Music{'"'}
+            {t('Sinn Sisamouth - "King of Music"')}
           </p>
         </div>
       </section>

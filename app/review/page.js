@@ -1,3 +1,4 @@
+import { getTranslation } from "../../utils/i18n/server.js";
 import { createClient } from "../../utils/supabase/server.js";
 import ReviewBoard from "../../components/ReviewBoard.js";
 import { styles } from "../../components/contributeStyles.js";
@@ -11,6 +12,7 @@ import { styles } from "../../components/contributeStyles.js";
 // owner IDs are never sent to the browser. Status changes go through the database's own
 // review_entry function; nothing in this page writes to the entries table.
 export default async function ReviewPage() {
+  const { t } = await getTranslation();
   const supabase = await createClient();
 
   const { data: isReviewer, error: reviewerError } = await supabase.rpc(
@@ -22,16 +24,13 @@ export default async function ReviewPage() {
     return (
       <main style={styles.page}>
         <div style={styles.shell}>
-          <p style={styles.kicker}>REVIEW</p>
-          <h1 style={styles.title}>Reviews</h1>
+          <p style={styles.kicker}>{t("REVIEW")}</p>
+          <h1 style={styles.title}>{t("Reviews")}</h1>
           <p style={styles.sub}>
-            Access Denied. This page is only available to authorized reviewers.
-          </p>
-          <p style={styles.sub}>
-            មិនអនុញ្ញាតឱ្យចូលប្រើទេ។ ទំព័រនេះសម្រាប់តែអ្នកត្រួតពិនិត្យដែលមានសិទ្ធិប៉ុណ្ណោះ។
+            {t("Access Denied. This page is only available to authorized reviewers.")}
           </p>
           <p style={styles.hint}>
-            <a href="/" style={styles.backInline}>Back to the archive</a>
+            <a href="/" style={styles.backInline}>{t("Back to the archive")}</a>
           </p>
         </div>
       </main>
@@ -64,10 +63,10 @@ export default async function ReviewPage() {
 
   return (
     <main style={styles.page}>
-      <p style={styles.kicker}>REVIEW QUEUE</p>
-      <h1 style={styles.title}>Pending submissions</h1>
+      <p style={styles.kicker}>{t("REVIEW QUEUE")}</p>
+      <h1 style={styles.title}>{t("Pending submissions")}</h1>
       <p style={styles.sub}>
-        Approve a song for the public archive, or send it back for corrections.
+        {t("Approve a song for the public archive, or send it back for corrections.")}
       </p>
 
       <ReviewBoard
@@ -80,7 +79,7 @@ export default async function ReviewPage() {
       />
 
       <p style={styles.pageFooter}>
-        <a href="/" style={styles.backInline}>Back to the archive</a>
+        <a href="/" style={styles.backInline}>{t("Back to the archive")}</a>
       </p>
     </main>
   );

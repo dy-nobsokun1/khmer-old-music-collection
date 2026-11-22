@@ -1,3 +1,5 @@
+"use client";
+import { useTranslation } from "./LanguageProvider.js";
 import MetaRow from "./MetaRow.js";
 import ReviewContributor from "./ReviewContributor.js";
 import { cardStyles, theme } from "./reviewStyles.js";
@@ -7,6 +9,7 @@ import { cardStyles, theme } from "./reviewStyles.js";
 // the client ReviewBoard, which also disables the buttons while its request to
 // the database's review_entry function is still in flight.
 export default function ReviewCard({ entry, busy, onPublish, onReturn }) {
+  const { t, language } = useTranslation();
   return (
     <li style={cardStyles.card}>
       <div style={cardStyles.cardTop}>
@@ -14,7 +17,7 @@ export default function ReviewCard({ entry, busy, onPublish, onReturn }) {
           <div style={cardStyles.imageWrap}>
             <img
               src={entry.vinyl_image}
-              alt={`${entry.title} record`}
+              alt={t("Record image: {title}", { title: entry.title })}
               style={cardStyles.image}
             />
           </div>
@@ -30,21 +33,21 @@ export default function ReviewCard({ entry, busy, onPublish, onReturn }) {
 
           <MetaRow
             icon="🕐"
-            label="Year"
-            value={entry.release_year ?? "Unknown"}
+            label={t("Year")}
+            value={entry.release_year ?? t("Unknown")}
             theme={theme}
           />
-          <MetaRow icon="🎵" label="Genre" value={entry.genre} theme={theme} />
+          <MetaRow icon="🎵" label={t("Genre")} value={t(entry.genre)} theme={theme} />
           <MetaRow
             icon="⏱"
-            label="Duration"
+            label={t("Duration")}
             value={entry.duration}
             theme={theme}
           />
           <MetaRow
             icon="📅"
-            label="Submitted"
-            value={formatDate(entry.created_at)}
+            label={t("Submitted")}
+            value={t(formatDate(entry.created_at, language))}
             theme={theme}
           />
         </div>
@@ -63,7 +66,7 @@ export default function ReviewCard({ entry, busy, onPublish, onReturn }) {
               : cardStyles.publishButton
           }
         >
-          Publish · បោះពុម្ពផ្សាយ
+          {t("Publish · បោះពុម្ពផ្សាយ")}
         </button>
         <button
           type="button"
@@ -75,7 +78,7 @@ export default function ReviewCard({ entry, busy, onPublish, onReturn }) {
               : cardStyles.returnButton
           }
         >
-          Return · បញ្ជូនត្រឡប់
+          {t("Return · បញ្ជូនត្រឡប់")}
         </button>
       </div>
     </li>
@@ -84,11 +87,11 @@ export default function ReviewCard({ entry, busy, onPublish, onReturn }) {
 
 // created_at -> “3 February 2026”. Unknown or unparseable values pass through
 // as-is rather than crashing the card.
-function formatDate(iso) {
+function formatDate(iso, language) {
   if (!iso) return "Unknown";
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return String(iso);
-  return date.toLocaleDateString("en-GB", {
+  return date.toLocaleDateString(language === "km" ? "km-KH" : "en-GB", {
     day: "numeric",
     month: "long",
     year: "numeric",

@@ -1,4 +1,5 @@
 "use client";
+import { useTranslation } from "../../components/LanguageProvider.js";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import AuthCard from "../../components/AuthCard.js";
@@ -8,6 +9,7 @@ import { createClient } from "../../utils/supabase/client.js";
 // — wrong password, unknown email, unconfirmed account — shows the same generic
 // message so we never leak which half of the credentials was wrong.
 export default function LoginPage() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [error, setError] = useState("");
 
@@ -30,13 +32,13 @@ export default function LoginPage() {
 
   return (
     <AuthCard
-      kicker="CONTRIBUTOR ACCESS"
-      title="Sign in"
-      subtitle="Log in to manage your contributions to the archive."
-      submitLabel="Sign in"
+      kicker={t("CONTRIBUTOR ACCESS")}
+      title={t("Sign in")}
+      subtitle={t("Log in to manage your contributions to the archive.")}
+      submitLabel={t("Sign in")}
       error={error}
       footerHref="/signup"
-      footerText="Don't have an account? Create one."
+      footerText={t("Don't have an account? Create one.")}
       passwordAutoComplete="current-password"
       onSubmit={login}
     />

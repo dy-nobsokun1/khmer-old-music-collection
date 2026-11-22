@@ -1,4 +1,5 @@
 "use client";
+import { useTranslation } from "./LanguageProvider.js";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "../utils/supabase/client.js";
@@ -15,6 +16,7 @@ import { styles } from "./contributeStyles.js";
 // delete policy in db/002_entries_owner_policies.sql: a request for somebody
 // else's row returns nothing, which is exactly what the check below reports.
 export default function DeleteEntryButton({ entryId, entryTitle }) {
+  const { t } = useTranslation();
   const router = useRouter();
   const [confirming, setConfirming] = useState(false);
   const [error, setError] = useState("");
@@ -72,7 +74,7 @@ export default function DeleteEntryButton({ entryId, entryTitle }) {
         onClick={() => setConfirming(true)}
         style={styles.dangerButton}
       >
-        Delete
+        {t("Delete")}
       </button>
     );
   }
@@ -80,7 +82,7 @@ export default function DeleteEntryButton({ entryId, entryTitle }) {
   return (
     <span style={styles.confirmRow}>
       <span style={styles.confirmText}>
-        Delete this record permanently?
+        {t("Delete this record permanently?")}
       </span>
       <button
         type="button"
@@ -88,7 +90,7 @@ export default function DeleteEntryButton({ entryId, entryTitle }) {
         disabled={busy}
         style={styles.cancelButton}
       >
-        Cancel
+        {t("Cancel")}
       </button>
       <button
         type="button"
@@ -96,11 +98,11 @@ export default function DeleteEntryButton({ entryId, entryTitle }) {
         disabled={busy}
         style={busy ? { ...styles.dangerButton, opacity: 0.6 } : styles.dangerButton}
       >
-        {busy ? "Deleting…" : `Yes, delete${entryTitle ? "" : " it"}`}
+        {busy ? t("Deleting…") : t("Yes, delete")}
       </button>
       {error ? (
         <span style={styles.dangerError} role="alert">
-          {error}
+          {t(error)}
         </span>
       ) : null}
     </span>

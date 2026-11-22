@@ -1,4 +1,5 @@
 "use client";
+import { useTranslation } from "./LanguageProvider.js";
 import { useState } from "react";
 import { createClient } from "../utils/supabase/client.js";
 import ReviewCard from "./ReviewCard.js";
@@ -24,6 +25,7 @@ export default function ReviewBoard({
   loadError = false,
   emptyMessage = "",
 }) {
+  const { t } = useTranslation();
   const [entries, setEntries] = useState(initialEntries);
   // Ids whose request is still in flight, kept in a Set so a click on one card
   // can never re-enable another card's buttons (no entry gets decided twice).
@@ -83,20 +85,20 @@ export default function ReviewBoard({
   if (loadError) {
     return (
       <ArchiveNotice>
-        Couldn’t load the review queue. Please refresh the page to try again.
+        {t("Couldn’t load the review queue. Please refresh the page to try again.")}
       </ArchiveNotice>
     );
   }
 
   if (entries.length === 0) {
-    return <ArchiveNotice>{emptyMessage}</ArchiveNotice>;
+    return <ArchiveNotice>{t(emptyMessage)}</ArchiveNotice>;
   }
 
   return (
     <>
       {error && !returnEntry ? (
         <p style={cardStyles.error} role="alert">
-          {error}
+          {t(error)}
         </p>
       ) : null}
       <ul style={cardStyles.list}>

@@ -1,4 +1,5 @@
 "use client";
+import { useTranslation } from "./LanguageProvider.js";
 import { Fragment } from "react";
 import EntryField from "./EntryField.js";
 import {
@@ -54,6 +55,7 @@ export default function EntryFields({
   photoPreviewUrl = null,
   photoVerified = false,
 }) {
+  const { t } = useTranslation();
   return (
     // noValidate: the browser's own bubbles would pre-empt our messages, and
     // would not know about rules like the 5 MB photo cap.
@@ -69,7 +71,7 @@ export default function EntryFields({
               label={field.label}
               hint={
                 isPhoto && !photoRequired
-                  ? "Optional. Leave this empty to keep the current photo. JPG, PNG or WebP, up to 5 MB."
+                  ? t("Optional. Leave this empty to keep the current photo. JPG, PNG or WebP, up to 5 MB.")
                   : field.hint
               }
               error={errors[field.name]}
@@ -96,13 +98,12 @@ export default function EntryFields({
                 {photoPreviewUrl ? (
                   <img
                     src={photoPreviewUrl}
-                    alt="Photo preview"
+                    alt={t("Photo preview")}
                     style={photoThumb}
                   />
                 ) : null}
                 <p style={photoStatusText} role="status">
-                  Photo verified ✓ — it will upload when you submit. /
-                  រូបថតបានផ្ទៀងផ្ទាត់ ✓ — នឹងផ្ទុកឡើងនៅពេលអ្នកដាក់ស្នើ។
+                  {t("Photo verified ✓ — it will upload when you submit. / រូបថតបានផ្ទៀងផ្ទាត់ ✓ — នឹងផ្ទុកឡើងនៅពេលអ្នកដាក់ស្នើ។")}
                 </p>
               </div>
             ) : null}
@@ -112,7 +113,7 @@ export default function EntryFields({
 
       {formError ? (
         <p style={styles.formError} role="alert">
-          {formError}
+          {t(formError)}
         </p>
       ) : null}
 
@@ -123,7 +124,7 @@ export default function EntryFields({
         disabled={busy}
         style={busy ? { ...styles.button, ...styles.buttonBusy } : styles.button}
       >
-        {busy ? busyLabel : submitLabel}
+        {t(busy ? busyLabel : submitLabel)}
       </button>
     </form>
   );

@@ -1,6 +1,9 @@
+"use client";
 // Vintage-styled search input. Purely presentational — the query value and
 // change handler are passed in by the archive that owns the search state.
+import { useTranslation } from "./LanguageProvider.js";
 export default function SearchBar({ value, onChange }) {
+  const { t } = useTranslation();
   const input = {
     width: "100%",
     padding: "12px 16px",
@@ -34,15 +37,15 @@ export default function SearchBar({ value, onChange }) {
           top: -9999,
         }}
       >
-        Search the collection
+        {t("Search the collection")}
       </label>
       <input
         id="archive-search"
         type="search"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder="ជ្រៀសជ្រើស — search by title, artist, or genre…"
-        aria-label="Search the collection"
+        placeholder={t("Search by title, artist, or genre…")}
+        aria-label={t("Search the collection")}
         style={input}
       />
     </div>

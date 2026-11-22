@@ -7,6 +7,63 @@ body {
   font-family: "Kantumruy Pro", Georgia, "Times New Roman", serif;
 }
 
+.language-bar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 24px;
+  background: #F5F3C7;
+  border-bottom: 1px solid #CFBFA1;
+}
+
+.language-toggle {
+  display: inline-flex;
+  gap: 4px;
+  padding: 3px;
+  border: 1px solid #CFBFA1;
+  border-radius: 999px;
+}
+
+.language-toggle button {
+  padding: 6px 16px;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 14px;
+  color: #4A3B2A;
+  background: transparent;
+  cursor: pointer;
+}
+
+.language-toggle button[aria-pressed="true"] {
+  color: #FFFDF2;
+  background: #A65A3C;
+}
+
+.language-toggle button:focus-visible {
+  outline: 2px solid #4A3B2A;
+  outline-offset: 3px;
+}
+
+.file-picker:focus-within {
+  outline: 2px solid #A65A3C;
+  outline-offset: 2px;
+}
+
+html[lang="km"] body {
+  line-height: 1.8;
+}
+
+html[lang="km"] p,
+html[lang="km"] h1,
+html[lang="km"] h2,
+html[lang="km"] h3,
+html[lang="km"] label,
+html[lang="km"] button {
+  font-family: "Kantumruy Pro", sans-serif !important;
+  letter-spacing: normal !important;
+  line-height: 1.8 !important;
+}
+
 /* Rising-note stream: music notes travel up-and-toward the corner while
    fading. Each note starts low (under the vinyl) and drifts up-right. */
 @keyframes noteRise {

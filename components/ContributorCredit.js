@@ -1,3 +1,4 @@
+"use client";
 // The "who added this record" line rendered under a published entry's metadata.
 // Shows a small circular avatar plus the contributor's public display name,
 // crediting the person who filed the record. When no public profile exists we
@@ -8,7 +9,9 @@
 // URL. Emails are never part of a contributor object: components/
 // MusicArchiveFromSupabase.js builds contributor data from the profiles table
 // and only its public columns.
+import { useTranslation } from "./LanguageProvider.js";
 export default function ContributorCredit({ contributor, theme }) {
+  const { t } = useTranslation();
   const displayName = contributor?.displayName || "";
   const avatarUrl = contributor?.avatarUrl || null;
 
@@ -29,7 +32,7 @@ export default function ContributorCredit({ contributor, theme }) {
       {avatarUrl ? (
         <img
           src={avatarUrl}
-          alt={`${displayName || "Contributor"} profile picture`}
+          alt={t("Profile picture: {name}", { name: displayName || t("Contributor") })}
           style={styles.avatarImg(theme)}
         />
       ) : (
@@ -38,8 +41,8 @@ export default function ContributorCredit({ contributor, theme }) {
         </span>
       )}
       <div style={styles.details}>
-        <p style={styles.label(theme)}>Contributed by / ចូលរួមចំណែកដោយ</p>
-        <p style={styles.name(theme)}>{nameLine}</p>
+        <p style={styles.label(theme)}>{t("Contributed by / ចូលរួមចំណែកដោយ")}</p>
+        <p style={styles.name(theme)}>{anonymous ? t(nameLine) : nameLine}</p>
       </div>
     </div>
   );

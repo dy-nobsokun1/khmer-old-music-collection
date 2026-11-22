@@ -1,3 +1,4 @@
+import { getTranslation } from "../../utils/i18n/server.js";
 import { createClient } from "../../utils/supabase/server.js";
 import ProfileForm from "../../components/ProfileForm.js";
 import { styles } from "../../components/contributeStyles.js";
@@ -10,6 +11,7 @@ import { styles } from "../../components/contributeStyles.js";
 // separately decides who may write; this page just hands the session user id
 // down to the form.
 export default async function ProfilePage() {
+  const { t } = await getTranslation();
   const supabase = await createClient();
 
   const {
@@ -20,21 +22,20 @@ export default async function ProfilePage() {
     return (
       <main style={styles.page}>
         <div style={styles.shell}>
-          <p style={styles.kicker}>PROFILE</p>
-          <h1 style={styles.title}>Log in to edit your profile</h1>
+          <p style={styles.kicker}>{t("PROFILE")}</p>
+          <h1 style={styles.title}>{t("Log in to edit your profile")}</h1>
           <p style={styles.sub}>
-            Your profile is tied to the account you sign in with, so logging in
-            is what shows you this page.
+            {t("Your profile is tied to the account you sign in with, so logging in is what shows you this page.")}
           </p>
           <div style={styles.form}>
             <p style={styles.hint}>
-              Already have an account?{" "}
-              <a href="/login" style={styles.backInline}>Log in</a>
+              {t("Already have an account?")}{" "}
+              <a href="/login" style={styles.backInline}>{t("Log in")}</a>
               {" · "}
-              <a href="/signup" style={styles.backInline}>Create one</a>
+              <a href="/signup" style={styles.backInline}>{t("Create one")}</a>
               .
             </p>
-            <a href="/" style={styles.buttonLink}>Back to the archive</a>
+            <a href="/" style={styles.buttonLink}>{t("Back to the archive")}</a>
           </div>
         </div>
       </main>
@@ -58,11 +59,10 @@ export default async function ProfilePage() {
   return (
     <main style={styles.page}>
       <div style={styles.shell}>
-        <p style={styles.kicker}>PROFILE</p>
-        <h1 style={styles.title}>Your profile</h1>
+        <p style={styles.kicker}>{t("PROFILE")}</p>
+        <h1 style={styles.title}>{t("Your profile")}</h1>
         <p style={styles.sub}>
-          This is the name and picture shown beside your entries across the
-          archive.
+          {t("This is the name and picture shown beside your entries across the archive.")}
         </p>
 
         <ProfileForm
@@ -73,7 +73,7 @@ export default async function ProfilePage() {
         />
 
         <p style={styles.hint}>
-          <a href="/" style={styles.backInline}>Back to the archive</a>
+          <a href="/" style={styles.backInline}>{t("Back to the archive")}</a>
         </p>
       </div>
     </main>

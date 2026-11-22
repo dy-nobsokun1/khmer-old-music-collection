@@ -1,6 +1,9 @@
+"use client";
 // A single metadata row: a small, muted line-glyph plus a label/value pair.
 // Icons stay small so they never compete with the album artwork.
+import { useTranslation } from "./LanguageProvider.js";
 export default function MetaRow({ icon, label, value, theme }) {
+  const { t } = useTranslation();
   const style = {
     display: "flex",
     alignItems: "center",
@@ -33,7 +36,7 @@ export default function MetaRow({ icon, label, value, theme }) {
       <span aria-hidden="true" style={iconStyle}>
         {icon}
       </span>
-      <span style={labelStyle}>{label}</span>
+      <span style={labelStyle}>{t(label)}</span>
       <span style={valueStyle}>{value}</span>
     </div>
   );

@@ -1,4 +1,5 @@
 "use client";
+import { useTranslation } from "../../components/LanguageProvider.js";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import AuthCard from "../../components/AuthCard.js";
@@ -8,6 +9,7 @@ import { createClient } from "../../utils/supabase/client.js";
 // project requires email confirmation (the default for Supabase), we show a
 // short message instead of signing straight in; otherwise we land on home.
 export default function SignupPage() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
@@ -47,7 +49,7 @@ export default function SignupPage() {
         router.refresh();
         return;
       }
-      setNotice(`Check your inbox at ${email} to confirm your account.`);
+      setNotice(email);
     } catch (caught) {
       // A thrown error (for example createClient failing because an env var
       // is missing on this deployment) should not leave the form silently
@@ -59,14 +61,14 @@ export default function SignupPage() {
 
   return (
     <AuthCard
-      kicker="JOIN THE ARCHIVE"
-      title="Create an account"
-      subtitle="Sign up to submit and manage your own entries."
-      submitLabel="Create account"
+      kicker={t("JOIN THE ARCHIVE")}
+      title={t("Create an account")}
+      subtitle={t("Sign up to submit and manage your own entries.")}
+      submitLabel={t("Create account")}
       error={error}
-      notice={notice}
+      notice={notice ? t("Check your inbox at {email} to confirm your account.", { email: notice }) : ""}
       footerHref="/login"
-      footerText="Already have an account? Sign in."
+      footerText={t("Already have an account? Sign in.")}
       passwordAutoComplete="new-password"
       onSubmit={signup}
     />
