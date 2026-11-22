@@ -1,5 +1,8 @@
 // Interface text only. Entry titles, names and contributor notes stay as written.
 const messages = {
+  "Home": "ទំព័រដើម",
+  "Collection": "បណ្ដុំបទចម្រៀង",
+  "Main navigation": "របាររុករកចម្បង",
   "Add a record": "បន្ថែមបទចម្រៀង",
   "My archive": "បណ្ណសាររបស់ខ្ញុំ",
   "My entries": "បទចម្រៀងរបស់ខ្ញុំ",

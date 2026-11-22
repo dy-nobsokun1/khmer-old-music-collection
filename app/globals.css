@@ -7,41 +7,185 @@ body {
   font-family: "Kantumruy Pro", Georgia, "Times New Roman", serif;
 }
 
-.language-bar {
+.site-header {
+  position: relative;
+  z-index: 5;
+  padding: 22px 32px;
+  background: linear-gradient(110deg, rgba(245,243,199,0.96), rgba(239,227,188,0.9)),
+    url('/images/paper-texture.jpg');
+  border-bottom: 1px solid rgba(164,141,102,0.25);
+}
+
+.site-header-inner {
+  max-width: 1440px;
+  margin: 0 auto;
   display: flex;
-  justify-content: flex-end;
-  padding: 10px 24px;
-  background: #F5F3C7;
-  border-bottom: 1px solid #CFBFA1;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 18px 28px;
+}
+
+.header-navigation {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-width: 0;
+  padding: 5px;
+  border: 1px solid rgba(164,141,102,0.2);
+  border-radius: 999px;
+  background: rgba(255,253,242,0.42);
+}
+
+.header-nav-link {
+  display: block;
+  padding: 12px 22px;
+  border-radius: 999px;
+  color: #4A3B2A;
+  text-decoration: none;
+  font-size: 16px;
+  white-space: nowrap;
+  transition: background 180ms ease;
+}
+
+.header-nav-link[aria-current="page"] {
+  background: #FFFDF2;
+  box-shadow: 0 2px 8px rgba(74,59,42,0.06);
+  font-weight: 600;
+}
+
+.header-nav-link:hover {
+  background: rgba(255,253,242,0.75);
+}
+
+.header-actions,
+.header-account {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  min-width: 0;
+}
+
+.header-actions {
+  margin-left: auto;
+}
+
+.header-identity {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  min-width: 0;
+}
+
+.header-email {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  color: #7A6B53;
+}
+
+.header-identity form {
+  margin: 0;
+}
+
+.header-text-action {
+  display: inline-block;
+  border: 0;
+  padding: 8px 0;
+  background: transparent;
+  color: #4A3B2A;
+  font: inherit;
+  font-size: 16px;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.header-text-action:hover {
+  color: #A65A3C;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.header-primary-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 26px;
+  border-radius: 999px;
+  background: #A65A3C;
+  color: #FFFDF2;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 180ms ease;
+}
+
+.header-primary-action:hover {
+  background: #87452E;
 }
 
 .language-toggle {
   display: inline-flex;
-  gap: 4px;
-  padding: 3px;
-  border: 1px solid #CFBFA1;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 2px;
+  padding: 5px;
+  background: rgba(255,253,242,0.88);
+  border: 1px solid rgba(164,141,102,0.15);
   border-radius: 999px;
 }
 
 .language-toggle button {
-  padding: 6px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 16px;
   border: 0;
   border-radius: 999px;
   font: inherit;
   font-size: 14px;
+  line-height: 1.8;
   color: #4A3B2A;
   background: transparent;
+  white-space: nowrap;
   cursor: pointer;
 }
 
 .language-toggle button[aria-pressed="true"] {
   color: #FFFDF2;
-  background: #A65A3C;
+  background: #3A2317;
 }
 
-.language-toggle button:focus-visible {
+.site-header a:focus-visible,
+.site-header button:focus-visible {
   outline: 2px solid #4A3B2A;
   outline-offset: 3px;
+}
+
+@media (max-width: 1100px) {
+  .site-header { padding: 18px 24px; }
+  .site-header-inner { gap: 14px; }
+  .header-navigation { flex: 1 1 100%; justify-content: space-between; }
+  .header-actions { justify-content: space-between; width: 100%; }
+}
+
+@media (max-width: 600px) {
+  .site-header { padding: 14px 16px; }
+  .header-navigation { border-radius: 24px; justify-content: flex-start; gap: 2px; }
+  .header-nav-link { padding: 10px 14px; font-size: 14px; }
+  .header-actions { flex-wrap: wrap; gap: 12px; }
+  .header-account { gap: 16px; margin-left: auto; }
+  .header-primary-action { padding: 12px 18px; font-size: 14px; }
+  .header-text-action { font-size: 14px; }
+  .header-email { max-width: 160px; }
+  .language-toggle button { padding: 8px 12px; }
 }
 
 .file-picker:focus-within {

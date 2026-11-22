@@ -1,7 +1,7 @@
 import collection from "../collection.config.js";
 import "./globals.css";
 import LanguageProvider from "../components/LanguageProvider.js";
-import LanguageToggle from "../components/LanguageToggle.js";
+import SiteHeader from "../components/SiteHeader.js";
 import { getLanguage } from "../utils/i18n/server.js";
 
 export async function generateMetadata() {
@@ -31,7 +31,7 @@ export default async function RootLayout({ children }) {
         }}
       >
         <LanguageProvider initialLanguage={language}>
-          <LanguageToggle />
+          <SiteHeader />
           {children}
         </LanguageProvider>
       </body>

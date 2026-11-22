@@ -2,8 +2,6 @@ import { getTranslation } from "../utils/i18n/server.js";
 import collection from "../collection.config.js";
 import MusicArchive from "../components/MusicArchive.js";
 import MusicArchiveFromSupabase from "../components/MusicArchiveFromSupabase.js";
-import { createClient } from "../utils/supabase/server.js";
-import { revalidatePath } from "next/cache";
 import { Suspense } from "react";
 
 // Deep sepia ink for body text.
@@ -114,78 +112,10 @@ const styles = {
     margin: "12px 0 48px",
     textAlign: "center",
   },
-  // Small account strip pinned to the top-right of the hero banner. Uses the
-  // same paper-cream pill as the page so it stays legible over the photo.
-  authBar: {
-    position: "absolute",
-    top: 16,
-    right: 24,
-    zIndex: 3,
-    display: "flex",
-    alignItems: "center",
-    gap: 12,
-    flexWrap: "wrap",
-    justifyContent: "flex-end",
-    left: 24,
-    width: "fit-content",
-    maxWidth: "calc(100% - 48px)",
-    marginLeft: "auto",
-    boxSizing: "border-box",
-    padding: "6px 14px",
-    backgroundColor: "rgba(245,243,199,0.92)",
-    border: "1px solid #CFBFA1",
-    borderRadius: 999,
-    color: ink,
-    fontFamily: "'Kantumruy Pro', Georgia, serif",
-  },
-  authEmail: {
-    fontSize: 14,
-    color: ink,
-  },
-  authLink: {
-    fontSize: 14,
-    color: rust,
-    textDecoration: "none",
-  },
-  authSeparator: {
-    fontSize: 13,
-    color: "#A08C6F",
-  },
-  logoutButton: {
-    border: "none",
-    background: "none",
-    padding: 0,
-    fontSize: 14,
-    color: rust,
-    textDecoration: "underline",
-    cursor: "pointer",
-  },
 };
-
-// Logs the current user out. Runs as a Server Action, so it can clear the
-// session cookie on the server and then re-serve fresh markup so the header
-// immediately reflects the logged-out state.
-export async function signOut() {
-  "use server";
-  const supabase = await createClient();
-  await supabase.auth.signOut();
-  revalidatePath("/", "page");
-}
 
 export default async function Home() {
   const { t, language } = await getTranslation();
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  // The Review link in the header is for reviewers only. The database answers
-  // is_reviewer, and it is asked here on the server so the header never guesses;
-  // signed-out visitors are not asked at all.
-  let isReviewer = false;
-  if (user) {
-    const { data, error } = await supabase.rpc("is_reviewer");
-    isReviewer = !error && data === true;
-  }
 
   return (
     <div style={{ position: "relative" }}>
@@ -223,57 +153,6 @@ export default async function Home() {
 
       <header style={styles.hero}>
         <div style={styles.heroFade} />
-        {/* Account strip: logged-in users see their email, a link to add a
-            record, and a log-out button; visitors see links to the login and
-            sign-up pages. The add-a-record link is shown only to signed-in
-            visitors because /contribute is behind the session check — sending
-            a logged-out visitor there would just bounce them to a "log in
-            first" page. */}
-        <div style={styles.authBar}>
-          {user ? (
-            <>
-              <span style={styles.authEmail}>{user.email}</span>
-              <span style={styles.authSeparator}>·</span>
-              <a href="/contribute" style={styles.authLink}>
-                {t("Add a record")}
-              </a>
-              <span style={styles.authSeparator}>·</span>
-              <a href="/my-archive" style={styles.authLink}>
-                {t("My archive")}
-              </a>
-              <span style={styles.authSeparator}>·</span>
-              <a href="/my-entries" style={styles.authLink}>
-                {t("My entries")}
-              </a>
-              <span style={styles.authSeparator}>·</span>
-              <a href="/profile" style={styles.authLink}>
-                {t("Profile")}
-              </a>
-              {isReviewer ? (
-                <>
-                  <span style={styles.authSeparator}>·</span>
-                  <a href="/review" style={styles.authLink}>
-                    {t("Review")}
-                  </a>
-                </>
-              ) : null}
-              <span style={styles.authSeparator}>·</span>
-              <button
-                type="button"
-                onClick={signOut}
-                style={styles.logoutButton}
-              >
-                {t("Log out")}
-              </button>
-            </>
-          ) : (
-            <>
-              <a href="/login" style={styles.authLink}>{t("Log in")}</a>
-              <span style={styles.authSeparator}>·</span>
-              <a href="/signup" style={styles.authLink}>{t("Sign up")}</a>
-            </>
-          )}
-        </div>
         <div style={styles.heroTitleWrap}>
           <h1 style={styles.heroTitle}>{language === "km" ? collection.translations.km.name : collection.name}</h1>
         </div>
@@ -315,8 +194,8 @@ of keeping it close and making it easy for the next person to find.`)}
       </section>
 
       {/* The collection comes from Supabase. The query runs on the server
-          inside this boundary, so everything above (hero, intro, account
-          strip) renders straight away and only the record grid waits. The
+          inside this boundary, so the hero and intro render straight away
+          and only the record grid waits. The
           fallback is the same archive view with no records, which shows the
           "Loading the collection…" notice in the same dashed box the empty
           and no-results states use. */}
