@@ -17,10 +17,11 @@ export default function AuthCard({
   footerHref,
   footerText,
   passwordAutoComplete = "current-password",
+  initialEmail = "",
   onSubmit,
 }) {
   const { t } = useTranslation();
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(initialEmail);
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -34,10 +35,10 @@ export default function AuthCard({
   const s = {
     page: { minHeight: "100vh", display: "flex", alignItems: "center",
       justifyContent: "center", backgroundColor: "#24150D", padding: "40px 16px",
-      minWidth: 280 },
+      minWidth: 0, boxSizing: "border-box" },
     card: { width: 380, maxWidth: "100%", backgroundColor: "#3A2317",
       border: "1px solid #5C3A21", borderRadius: 12, padding: "28px 26px",
-      boxShadow: "0 12px 28px rgba(0,0,0,0.45)" },
+      boxShadow: "0 12px 28px rgba(0,0,0,0.45)", boxSizing: "border-box" },
     kicker: { fontFamily: "'Courier New', monospace", color: "#A65A3C",
       fontSize: 13, letterSpacing: 3, textTransform: "uppercase", margin: 0 },
     title: { fontSize: 28, fontWeight: 500, color: "#F5F3C7",
@@ -47,7 +48,7 @@ export default function AuthCard({
     label: { fontSize: 13, color: "#CFBFA1", display: "block", margin: "0 0 8px" },
     input: { width: "100%", padding: "12px 14px", fontSize: 16, color: "#F5F3C7",
       backgroundColor: "#24150D", border: "1px solid #5C3A21", borderRadius: 8,
-      outline: "none", fontFamily: "'Kantumruy Pro', Georgia, serif" },
+      outline: "none", fontFamily: "'Kantumruy Pro', Georgia, serif", boxSizing: "border-box" },
     button: { width: "100%", padding: "14px 0", fontSize: 16, cursor: "pointer",
       color: "#24150D", backgroundColor: "#A65A3C", border: "none", borderRadius: 8,
       fontFamily: "'Kantumruy Pro', Georgia, serif", opacity: busy ? 0.6 : 1 },

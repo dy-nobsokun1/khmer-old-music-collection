@@ -71,26 +71,159 @@ body {
   margin-left: auto;
 }
 
-.header-identity {
+.header-user-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-menu {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.profile-trigger {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 1px solid rgba(164,141,102,0.3);
+  border-radius: 50%;
+  background: #FFFDF2;
+  color: #4A3B2A;
+  cursor: pointer;
+}
+
+.profile-trigger:hover,
+.profile-trigger[aria-expanded="true"] {
+  background: #3A2317;
+  color: #FFFDF2;
+}
+
+.profile-menu-panel {
+  position: absolute;
+  top: calc(100% + 14px);
+  left: 0;
+  width: min(340px, calc(100vw - 32px));
+  box-sizing: border-box;
+  padding: 18px 10px 10px;
+  border: 1px solid #CFBFA1;
+  border-radius: 20px;
+  background: #FFFDF2;
+  box-shadow: 0 14px 40px rgba(58,35,23,0.2);
+}
+
+.profile-menu-heading {
+  margin: 0 10px 4px;
+  color: #4A3B2A;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.profile-menu-hint,
+.profile-menu-empty {
+  margin: 0 10px 14px;
+  color: #7A6B53;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.saved-account-list {
+  max-height: 280px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.saved-account-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.saved-account-link {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 10px;
+  border-radius: 12px;
+  color: #4A3B2A;
+  text-decoration: none;
+}
+
+.saved-account-link:hover,
+.saved-account-link[aria-current="true"] {
+  background: #F1E6CF;
+}
+
+.saved-account-avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #E9D6B8;
+  color: #71472D;
+  font-size: 16px;
+}
+
+.saved-account-details {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
   gap: 2px;
   min-width: 0;
 }
 
-.header-email {
-  max-width: 180px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 13px;
+.saved-account-email { overflow-wrap: anywhere; font-size: 14px; }
+.saved-account-status { color: #7A6B53; font-size: 13px; }
+.saved-account-check { margin-left: auto; color: #A65A3C; }
+
+.forget-account {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
   color: #7A6B53;
+  font-size: 22px;
+  cursor: pointer;
 }
 
-.header-identity form {
-  margin: 0;
+.forget-account:hover { background: #FDF0EC; color: #8A2F1D; }
+
+.profile-menu-footer {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #CFBFA1;
 }
+
+.profile-menu-footer form { margin: 0; }
+
+.profile-menu-action {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #4A3B2A;
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.profile-menu-action:hover { background: #F1E6CF; }
+.profile-logout { color: #8A2F1D; }
 
 .header-text-action {
   display: inline-block;
@@ -184,7 +317,6 @@ body {
   .header-account { gap: 16px; margin-left: auto; }
   .header-primary-action { padding: 12px 18px; font-size: 14px; }
   .header-text-action { font-size: 14px; }
-  .header-email { max-width: 160px; }
   .language-toggle button { padding: 8px 12px; }
 }
 

@@ -4,6 +4,7 @@ import { createClient } from "../utils/supabase/server.js";
 import HeaderNavigation from "./HeaderNavigation.js";
 import HeaderAccount from "./HeaderAccount.js";
 import LanguageToggle from "./LanguageToggle.js";
+import ProfileMenu from "./ProfileMenu.js";
 
 async function signOut() {
   "use server";
@@ -27,8 +28,11 @@ export default async function SiteHeader() {
       <div className="site-header-inner">
         <HeaderNavigation signedIn={Boolean(user)} isReviewer={isReviewer} />
         <div className="header-actions">
-          <LanguageToggle />
-          <HeaderAccount email={user?.email} signedIn={Boolean(user)} signOut={signOut} />
+          <div className="header-user-controls">
+            <ProfileMenu email={user?.email} signedIn={Boolean(user)} signOut={signOut} />
+            <LanguageToggle />
+          </div>
+          <HeaderAccount signedIn={Boolean(user)} />
         </div>
       </div>
     </header>

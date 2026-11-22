@@ -1,46 +1,8 @@
-"use client";
-import { useTranslation } from "../../components/LanguageProvider.js";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import AuthCard from "../../components/AuthCard.js";
-import { createClient } from "../../utils/supabase/client.js";
+import LoginForm from "../../components/LoginForm.js";
 
-// Sign-in page. Authenticates with Supabase email/password. Any failed attempt
-// — wrong password, unknown email, unconfirmed account — shows the same generic
-// message so we never leak which half of the credentials was wrong.
-export default function LoginPage() {
-  const { t } = useTranslation();
-  const router = useRouter();
-  const [error, setError] = useState("");
-
-  async function login(email, password) {
-    setError("");
-    const supabase = createClient();
-    const { error: authError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    if (authError) {
-      setError("Invalid email or password");
-      return;
-    }
-    // The session cookie is now written. Refresh so the server components see
-    // the new session, then head back to the home page.
-    router.push("/");
-    router.refresh();
-  }
-
-  return (
-    <AuthCard
-      kicker={t("CONTRIBUTOR ACCESS")}
-      title={t("Sign in")}
-      subtitle={t("Log in to manage your contributions to the archive.")}
-      submitLabel={t("Sign in")}
-      error={error}
-      footerHref="/signup"
-      footerText={t("Don't have an account? Create one.")}
-      passwordAutoComplete="current-password"
-      onSubmit={login}
-    />
-  );
+export default async function LoginPage({ searchParams }) {
+  const params = await searchParams;
+  const email = typeof params?.email === "string" ? params.email.trim().slice(0, 254) : "";
+  // A different account starts a fresh form, including an empty password field.
+  return <LoginForm key={email} initialEmail={email} />;
 }
